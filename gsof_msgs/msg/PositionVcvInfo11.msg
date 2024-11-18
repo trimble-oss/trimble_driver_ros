@@ -1,0 +1,10 @@
+std_msgs/Header header
+float32 position_rms
+float32 xx
+float32 xy
+float32 xz
+float32 yy
+float32 yz
+float32 zz
+float32 unit_var
+uint16 num_epochs

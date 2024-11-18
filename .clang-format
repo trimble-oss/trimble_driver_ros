@@ -1,0 +1,21 @@
+BasedOnStyle: Google
+IndentWidth: 2
+---
+Language: Cpp
+Standard: Cpp11
+ColumnLimit: 120
+AlignConsecutiveAssignments: true
+AlignTrailingComments: true
+AllowAllConstructorInitializersOnNextLine: false
+FixNamespaceComments: true
+SpacesBeforeTrailingComments: 2
+AlignEscapedNewlines: Right
+AlignAfterOpenBracket: Align
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowAllArgumentsOnNextLine: false
+BinPackArguments: true
+BinPackParameters: false
+BreakBeforeTernaryOperators: true
+ExperimentalAutoDetectBinPacking: true
+---
+

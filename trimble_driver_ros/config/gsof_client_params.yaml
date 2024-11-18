@@ -1,0 +1,11 @@
+gsof_client:
+  ros__parameters:
+    ip: "10.8.115.30"
+    port: 5017
+    parent_frame: "ned"
+    child_frame: "ins"
+    publish_gsof_msgs: true
+    publish_ros_msgs: true
+    publish_tf: true
+    publish_rep103: true
+    time_source: "now"   # now, gps or gps_time_of_week

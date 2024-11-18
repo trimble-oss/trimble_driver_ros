@@ -1,0 +1,9 @@
+uint8 prn
+uint8 sv_system
+uint8 sv_flags1
+uint8 sv_flags2
+uint8 elevation
+uint16 azimuth
+uint8 snr_l1
+uint8 snr_l2
+uint8 snr_l5

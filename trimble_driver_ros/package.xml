@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2024. Trimble Inc.
+  ~ All rights reserved.
+  -->
+
+<package format="3">
+  <name>trimble_driver_ros</name>
+  <version>0.1.0</version>
+  <description>Connect Trimble products publishing GSOF data to ROS.</description>
+
+  <maintainer email="andre_nguyen@trimble.com">Andre Nguyen</maintainer>
+  <license>BSD</license>
+  <author email="andre_nguyen@trimble.com">Andre Nguyen</author>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+  
+  <!-- Non-ROS system dependencies-->
+  <depend>boost</depend>
+  <depend>geographiclib</depend>
+  <depend>libpcap</depend>
+
+  <depend>diagnostic_msgs</depend>
+  <depend>gsof_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>trimble_interfaces</depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>launch_testing</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
