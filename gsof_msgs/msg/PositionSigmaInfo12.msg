@@ -1,0 +1,12 @@
+std_msgs/Header header
+
+float32 position_rms
+float32 sigma_east
+float32 sigma_north
+float32 covariance_east_north
+float32 sigma_up
+float32 semi_major_axis
+float32 semi_minor_axis
+float32 orientation
+float32 unit_variance
+uint16 number_epochs

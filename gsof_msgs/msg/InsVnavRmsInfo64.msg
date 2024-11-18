@@ -1,0 +1,7 @@
+std_msgs/Header header
+GpsTime gps_time
+Status status
+NorthEastDownf position_rms_meters
+NorthEastDownf velocity_rms_mps
+Vector3f attitude_rms_degrees
+float32 heave_rms_meters

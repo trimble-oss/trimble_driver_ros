@@ -1,0 +1,10 @@
+trmb_cc_lib(
+  NAME
+    util
+  SRCS
+    status.cpp
+  INC
+    ${PROJECT_SOURCE_DIR}/include
+  COPTS
+    ${COMMON_COMPILE_FLAGS}
+)

@@ -1,0 +1,4 @@
+std_msgs/Header header
+uint8 clock_flags
+float64 clock_offset
+float64 freq_offset

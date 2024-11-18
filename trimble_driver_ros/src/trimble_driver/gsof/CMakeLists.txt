@@ -1,0 +1,16 @@
+trmb_cc_lib(
+    NAME
+        gsof
+    SRCS
+        message.cpp
+        message_parser.cpp
+        omnistar.cpp
+        packet_parser.cpp
+        position_fix.cpp
+        stream_page_parser.cpp
+        stream_chapter_parser.cpp
+    INC
+        ${PROJECT_SOURCE_DIR}/include
+    COPTS
+        ${COMMON_COMPILE_FLAGS}
+)

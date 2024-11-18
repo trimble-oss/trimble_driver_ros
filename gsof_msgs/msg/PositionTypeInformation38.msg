@@ -1,0 +1,14 @@
+std_msgs/Header header
+float32 error_scale
+uint8 solution_flags
+uint8 rtk_condition
+float32 correction_age
+uint8 network_flags
+uint8 network_flags2
+uint8 frame_flag
+uint16 itrf_epoch
+uint8 tectonic_plate
+int32 rtx_ram_sub_minutes_left
+uint8 pole_wobble_status_flag
+float32 pole_wobble_distance
+uint8 position_fix_type

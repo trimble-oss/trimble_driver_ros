@@ -1,0 +1,13 @@
+std_msgs/Header header
+GpsTime gps_time
+Status status
+LatLongAltitude lla
+NorthEastDownf velocity
+float32 total_speed
+float64 roll
+float64 pitch
+float64 heading
+float64 track_angle
+Vector3f angular_rate
+Vector3f acceleration
+float64 heave

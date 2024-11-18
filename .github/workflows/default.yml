@@ -1,0 +1,36 @@
+name: build_and_test
+on:
+    [push, pull_request]
+
+defaults:
+    run:
+        shell: bash
+    
+jobs:
+    build:
+        strategy:
+            matrix:
+                os:
+                    - ubuntu-latest
+                    - ubuntu-latest-arm
+        runs-on: ${{ matrix.os }}
+        container:
+            image: ros:rolling-ros-base
+        steps:
+            - name: Git LFS
+              run: |
+                apt update && apt install -y curl
+                curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+                apt install git-lfs
+                git lfs install
+            - name: Extra colcon extensions
+              run: |
+                apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result
+            - uses: ros-tooling/action-ros-ci@v0.3
+              with:
+                package-name: >
+                    gsof_msgs
+                    trimble_interfaces
+                    trimble_driver_ros
+                target-ros2-distro: rolling
+                import-token: ${{ secrets.GITHUB_TOKEN }}
