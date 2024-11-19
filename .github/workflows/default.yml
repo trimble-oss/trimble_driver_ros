@@ -15,7 +15,7 @@ jobs:
                     - ubuntu-latest-arm
         runs-on: ${{ matrix.os }}
         container:
-            image: ros:rolling-ros-base
+            image: ros:jazzy-ros-base
         steps:
             - name: Git LFS
               run: |
@@ -32,5 +32,5 @@ jobs:
                     gsof_msgs
                     trimble_interfaces
                     trimble_driver_ros
-                target-ros2-distro: rolling
+                target-ros2-distro: jazzy
                 import-token: ${{ secrets.GITHUB_TOKEN }}
