@@ -88,7 +88,7 @@ install(
 # These macros only work in the same scope as ament_package() due to a
 # variable not being set in the cache
 rclcpp_components_register_nodes(
-    gsof_client_ros "trimble_driver_ros::GsofClientRos")
+    gsof_client_ros "trmb_ros::GsofClientRos")
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
