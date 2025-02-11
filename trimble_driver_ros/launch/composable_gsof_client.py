@@ -43,7 +43,7 @@ def generate_launch_description():
             composable_node_descriptions=[
                 ComposableNode(
                     package='trimble_driver_ros',
-                    plugin='trimble_driver_ros::GsofClientRos',
+                    plugin='trmb_ros::GsofClientRos',
                     name=LaunchConfiguration('node_name'),
                     parameters=[default_params, LaunchConfiguration('config')])
             ],
