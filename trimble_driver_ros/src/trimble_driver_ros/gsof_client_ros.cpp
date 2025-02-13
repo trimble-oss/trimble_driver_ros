@@ -20,6 +20,7 @@ GsofClientRos::GsofClientRos(const rclcpp::NodeOptions &options)
       time_source_(util::RosTimeSource::GPS_TIME_OF_WEEK),
       ros_clock_(RCL_ROS_TIME),
       publish_gsof_msgs_(true),
+      estimate_gsof_time_(false),
       publish_ros_msgs_(true),
       publish_rep103_(false),
       publish_tf_(true),
