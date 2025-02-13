@@ -50,6 +50,8 @@ void GsofClientRos::setupRosParameters() {
   publish_ros_msgs_  = this->declare_parameter("publish_ros_msgs", true);
   publish_rep103_    = this->declare_parameter("publish_rep103", true);
 
+  estimate_gsof_time_ = this->declare_parameter("estimate_gsof_time", false);
+
   bool publish_tf = this->declare_parameter("publish_tf", true);
   if (publish_tf) {
     transform_broadcaster_.emplace(this);

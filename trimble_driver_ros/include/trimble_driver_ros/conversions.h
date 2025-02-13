@@ -60,6 +60,17 @@ struct HasGsofGpsTime : std::false_type {};
 template <typename T>
 struct HasGsofGpsTime<T, decltype(T::gps_time)> : std::true_type {};
 
+// A few messages have a gps_time_ms field and no week (AttitudeInfo)
+// This will select cases where we have a time of week, but no week number
+template <typename T, typename = void>
+struct HasGPSmsOnly : std::false_type {};
+
+template <typename T>
+struct HasGPSmsOnly<T, decltype(T::gps_time_ms)> : std::true_type {};
+
+template <typename T>
+struct HasGPSmsOnly<T, decltype(T::gps_week, T::gps_week_number)> : std::false_type {};
+
 geometry_msgs::msg::TransformStamped toTransformStamped(
     const std_msgs::msg::Header &header,
     const decltype(geometry_msgs::msg::TransformStamped::child_frame_id) &child_frame_id,
