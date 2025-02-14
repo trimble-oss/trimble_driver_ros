@@ -60,16 +60,25 @@ struct HasGsofGpsTime : std::false_type {};
 template <typename T>
 struct HasGsofGpsTime<T, decltype(T::gps_time)> : std::true_type {};
 
-// A few messages have a gps_time_ms field and no week (AttitudeInfo)
-// This will select cases where we have a time of week, but no week number
-template <typename T, typename = void>
-struct HasGPSmsOnly : std::false_type {};
-
+/**
+ * Type trait to mark a specific type as having a specialized function to convert to a ROS message
+ */
 template <typename T>
-struct HasGPSmsOnly<T, decltype(T::gps_time_ms)> : std::true_type {};
+struct HasSpecializedConv : std::false_type {};
 
-template <typename T>
-struct HasGPSmsOnly<T, decltype(T::gps_week, T::gps_week_number)> : std::false_type {};
+// Only has gps_time in ms, so we only need to fetch the week number 
+template<>
+struct HasSpecializedConv<trmb::gsof::AttitudeInfo> : std::true_type {};
+
+// The following types have both gps ms and week, but aren't a GPSTime object
+template<>
+struct HasSpecializedConv<trmb::gsof::BasePositionAndQualityIndicator> : std::true_type {};
+
+template<>
+struct HasSpecializedConv<trmb::gsof::PositionTimeInfo> : std::true_type {};
+
+template<>
+struct HasSpecializedConv<trmb::gsof::CurrentTime> : std::true_type {};
 
 geometry_msgs::msg::TransformStamped toTransformStamped(
     const std_msgs::msg::Header &header,
