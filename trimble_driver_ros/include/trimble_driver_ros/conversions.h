@@ -66,18 +66,18 @@ struct HasGsofGpsTime<T, decltype(T::gps_time)> : std::true_type {};
 template <typename T>
 struct HasSpecializedConv : std::false_type {};
 
-// Only has gps_time in ms, so we only need to fetch the week number 
-template<>
+// Only has gps_time in ms, so we only need to fetch the week number
+template <>
 struct HasSpecializedConv<trmb::gsof::AttitudeInfo> : std::true_type {};
 
 // The following types have both gps ms and week, but aren't a GPSTime object
-template<>
+template <>
 struct HasSpecializedConv<trmb::gsof::BasePositionAndQualityIndicator> : std::true_type {};
 
-template<>
+template <>
 struct HasSpecializedConv<trmb::gsof::PositionTimeInfo> : std::true_type {};
 
-template<>
+template <>
 struct HasSpecializedConv<trmb::gsof::CurrentTime> : std::true_type {};
 
 geometry_msgs::msg::TransformStamped toTransformStamped(

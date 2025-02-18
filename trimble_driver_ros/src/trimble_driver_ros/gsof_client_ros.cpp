@@ -310,17 +310,14 @@ rclcpp::Time GsofClientRos::getRosTimestamp(const trmb::gsof::GpsTime &gps_time)
 }
 
 rclcpp::Time GsofClientRos::getRosTimestampEstimate(std::optional<uint32_t> gps_time_ms) {
-
   // Prefer ins_solution_ over position_time_info_ for timestamp estimation
   if (ins_solution_) {
-    return getRosTimestamp(ins_solution_->gps_time.week, 
-                           gps_time_ms.value_or(ins_solution_->gps_time.time_msec));
-  } 
-  
+    return getRosTimestamp(ins_solution_->gps_time.week, gps_time_ms.value_or(ins_solution_->gps_time.time_msec));
+  }
+
   if (position_time_info_) {
-    return getRosTimestamp(position_time_info_->gps_week,
-                           gps_time_ms.value_or(position_time_info_->gps_time_ms));
-  } 
+    return getRosTimestamp(position_time_info_->gps_week, gps_time_ms.value_or(position_time_info_->gps_time_ms));
+  }
 
   return getRosTimestamp(0, gps_time_ms.value_or(0));
 }

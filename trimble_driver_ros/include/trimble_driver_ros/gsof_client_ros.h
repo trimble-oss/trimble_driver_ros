@@ -121,9 +121,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t< HasStdMsgsHeader<RosMessageType>::value && 
-                              HasGsofGpsTime<NativeMessageType>::value &&
-                             !HasSpecializedConv<NativeMessageType>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && HasGsofGpsTime<NativeMessageType>::value &&
+                                 !HasSpecializedConv<NativeMessageType>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher       = getGsofPublisher<RosMessageType>(gsof_id);
@@ -144,9 +143,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t< HasStdMsgsHeader<RosMessageType>::value && 
-                             !HasGsofGpsTime<NativeMessageType>::value &&
-                             !HasSpecializedConv<NativeMessageType>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && !HasGsofGpsTime<NativeMessageType>::value &&
+                                 !HasSpecializedConv<NativeMessageType>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher = getGsofPublisher<RosMessageType>(gsof_id);
@@ -156,8 +154,8 @@ class GsofClientRos : public rclcpp::Node {
     // Check if we should estimate a header time stamp or leave it as default
     if (estimate_gsof_time_) {
       ros_msg.header.stamp = getRosTimestampEstimate();
-    }     
-    
+    }
+
     publisher->publish(ros_msg);
   }
 
@@ -171,9 +169,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && 
-                             HasSpecializedConv<NativeMessageType>::value &&
-                             std::is_same<NativeMessageType, trmb::gsof::AttitudeInfo>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && HasSpecializedConv<NativeMessageType>::value &&
+                                 std::is_same<NativeMessageType, trmb::gsof::AttitudeInfo>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher = getGsofPublisher<RosMessageType>(gsof_id);
@@ -183,7 +180,7 @@ class GsofClientRos : public rclcpp::Node {
     // Check if we should estimate a header time stamp or leave it as default
     if (estimate_gsof_time_) {
       ros_msg.header.stamp = getRosTimestampEstimate(gsof_msg.gps_time);
-    } 
+    }
 
     publisher->publish(ros_msg);
   }
@@ -198,9 +195,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && 
-                             HasSpecializedConv<NativeMessageType>::value &&
-                             std::is_same<NativeMessageType, trmb::gsof::PositionTimeInfo>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && HasSpecializedConv<NativeMessageType>::value &&
+                                 std::is_same<NativeMessageType, trmb::gsof::PositionTimeInfo>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher       = getGsofPublisher<RosMessageType>(gsof_id);
@@ -220,9 +216,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && 
-                             HasSpecializedConv<NativeMessageType>::value &&
-                             std::is_same<NativeMessageType, trmb::gsof::BasePositionAndQualityIndicator>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && HasSpecializedConv<NativeMessageType>::value &&
+                                 std::is_same<NativeMessageType, trmb::gsof::BasePositionAndQualityIndicator>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher       = getGsofPublisher<RosMessageType>(gsof_id);
@@ -242,9 +237,8 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && 
-                             HasSpecializedConv<NativeMessageType>::value &&
-                             std::is_same<NativeMessageType, trmb::gsof::CurrentTime>::value,
+            std::enable_if_t<HasStdMsgsHeader<RosMessageType>::value && HasSpecializedConv<NativeMessageType>::value &&
+                                 std::is_same<NativeMessageType, trmb::gsof::CurrentTime>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher       = getGsofPublisher<RosMessageType>(gsof_id);
@@ -264,14 +258,13 @@ class GsofClientRos : public rclcpp::Node {
   template <class RosMessageType,
             class NativeMessageType,
             std::size_t gsof_id,
-            std::enable_if_t<!HasStdMsgsHeader<RosMessageType>::value &&
-                             !HasSpecializedConv<NativeMessageType>::value,
+            std::enable_if_t<!HasStdMsgsHeader<RosMessageType>::value && !HasSpecializedConv<NativeMessageType>::value,
                              bool> = true>
   void publishGsofMessage(const trmb::gsof::Message &message) {
     auto publisher = getGsofPublisher<RosMessageType>(gsof_id);
     publisher->publish(toRosMessage(message.as<NativeMessageType>()));
   }
-  
+
   rclcpp::Time getRosTimestamp(const trmb::gsof::GpsTime &gps_time);
   rclcpp::Time getRosTimestamp(uint16_t gps_week, uint32_t gps_time_ms);
   rclcpp::Time getRosTimestampEstimate(std::optional<uint32_t> gps_time_ms = std::nullopt);
