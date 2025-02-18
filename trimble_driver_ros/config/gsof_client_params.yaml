@@ -5,6 +5,7 @@ gsof_client:
     parent_frame: "ned"
     child_frame: "ins"
     publish_gsof_msgs: true
+    estimate_gsof_time: false
     publish_ros_msgs: true
     publish_tf: true
     publish_rep103: true

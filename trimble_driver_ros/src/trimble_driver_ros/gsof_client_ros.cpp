@@ -20,6 +20,7 @@ GsofClientRos::GsofClientRos(const rclcpp::NodeOptions &options)
       time_source_(util::RosTimeSource::GPS_TIME_OF_WEEK),
       ros_clock_(RCL_ROS_TIME),
       publish_gsof_msgs_(true),
+      estimate_gsof_time_(false),
       publish_ros_msgs_(true),
       publish_rep103_(false),
       publish_tf_(true),
@@ -49,6 +50,8 @@ void GsofClientRos::setupRosParameters() {
   publish_gsof_msgs_ = this->declare_parameter("publish_gsof_msgs", true);
   publish_ros_msgs_  = this->declare_parameter("publish_ros_msgs", true);
   publish_rep103_    = this->declare_parameter("publish_rep103", true);
+
+  estimate_gsof_time_ = this->declare_parameter("estimate_gsof_time", false);
 
   bool publish_tf = this->declare_parameter("publish_tf", true);
   if (publish_tf) {
@@ -288,6 +291,10 @@ void GsofClientRos::publishInsSolutionCallback(const trmb::gsof::Message &) {
   }
 }
 
+rclcpp::Time GsofClientRos::getRosTimestamp(uint16_t gps_week, uint32_t gps_time_ms) {
+  return getRosTimestamp(trmb::gsof::GpsTime{gps_week, gps_time_ms});
+}
+
 rclcpp::Time GsofClientRos::getRosTimestamp(const trmb::gsof::GpsTime &gps_time) {
   switch (time_source_) {
     case util::RosTimeSource::NOW:
@@ -300,6 +307,19 @@ rclcpp::Time GsofClientRos::getRosTimestamp(const trmb::gsof::GpsTime &gps_time)
       // Should never happen because we are protected by -Wswitch-enum
       throw std::logic_error("Unhandled RosTimeSource.");
   }
+}
+
+rclcpp::Time GsofClientRos::getRosTimestampEstimate(std::optional<uint32_t> gps_time_ms) {
+  // Prefer ins_solution_ over position_time_info_ for timestamp estimation
+  if (ins_solution_) {
+    return getRosTimestamp(ins_solution_->gps_time.week, gps_time_ms.value_or(ins_solution_->gps_time.time_msec));
+  }
+
+  if (position_time_info_) {
+    return getRosTimestamp(position_time_info_->gps_week, gps_time_ms.value_or(position_time_info_->gps_time_ms));
+  }
+
+  return getRosTimestamp(0, gps_time_ms.value_or(0));
 }
 
 void GsofClientRos::getOriginCallback(const std::shared_ptr<rmw_request_id_t>,
