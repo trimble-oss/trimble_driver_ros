@@ -160,7 +160,7 @@ class GsofClientRos : public rclcpp::Node {
   }
 
   /**
-   * Specialized callback for AttitudeInfo to handle a the case where only gps week in ms is available
+   * Specialized callback for AttitudeInfo to handle the case where only gps week in ms is available
    * @tparam RosMessageType     A type generated using the ROS IDL
    * @tparam NativeMessageType  A C++ GSOF type
    * @tparam gsof_id            The GSOF record id
