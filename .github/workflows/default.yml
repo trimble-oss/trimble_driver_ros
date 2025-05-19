@@ -1,6 +1,6 @@
 name: build_and_test
 on:
-    [push, pull_request]
+    [pull_request]
 
 defaults:
     run:
