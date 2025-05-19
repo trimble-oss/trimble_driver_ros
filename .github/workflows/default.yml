@@ -12,7 +12,7 @@ jobs:
             matrix:
                 os:
                     - ubuntu-latest
-                    - ubuntu-latest-arm
+                    - ubuntu-22.04-arm
         runs-on: ${{ matrix.os }}
         container:
             image: ros:humble-ros-base
@@ -26,7 +26,7 @@ jobs:
             - name: Extra colcon extensions
               run: |
                 apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result
-            - uses: ros-tooling/action-ros-ci@v0.3
+            - uses: ros-tooling/action-ros-ci@0.4.3
               with:
                 package-name: >
                     gsof_msgs
