@@ -53,6 +53,11 @@ Back at the `IO Configuration > Port Summary` page, you should see your port wit
 ## Building
 Building can be done through the typical ROS workflow of using `rosdep` and `colcon`.
 
+0. Source your ROS environment
+   ```bash
+   source /opt/ros/humble/setup.bash
+   ```
+
 1. Clone this repository into your colcon workspace
    ```
    cd ~/colcon_ws/src
@@ -79,7 +84,10 @@ Building can be done through the typical ROS workflow of using `rosdep` and `col
    ```
 
 ## Running
-First edit the `gsof_client_params.yaml` file to fill in the IP address and GSOF port of your device.
+First edit the `gsof_client_params.yaml` file to fill in the IP address and GSOF port of your device and then source your workspace.
+```bash
+source ~/colcon_ws/install/setup.bash
+```
 
 ### ros2 launch
 Launch the gsof client node using
