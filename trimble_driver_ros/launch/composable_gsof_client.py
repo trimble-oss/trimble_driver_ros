@@ -14,7 +14,7 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
     default_config = os.path.join(
-        get_package_share_directory('trimble_driver_ros'),
+        get_package_share_directory('trimble_driver'),
         'config',
         'gsof_client_params.yaml'
     )
@@ -42,8 +42,8 @@ def generate_launch_description():
             executable='component_container',
             composable_node_descriptions=[
                 ComposableNode(
-                    package='trimble_driver_ros',
-                    plugin='trimble_driver_ros::GsofClientRos',
+                    package='trimble_driver',
+                    plugin='trmb_ros::GsofClientRos',
                     name=LaunchConfiguration('node_name'),
                     parameters=[default_params, LaunchConfiguration('config')])
             ],

@@ -11,7 +11,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     config = os.path.join(
-        get_package_share_directory('trimble_driver_ros'),
+        get_package_share_directory('trimble_driver'),
         'config',
         'gsof_client_params.yaml'
     )
@@ -29,7 +29,7 @@ def generate_launch_description():
             description='YAML file for setting ROS params'
         ),
         Node(
-            package='trimble_driver_ros',
+            package='trimble_driver',
             executable='gsof_client_node',
             name=LaunchConfiguration('node_name'),
             parameters=[config, LaunchConfiguration('config')],

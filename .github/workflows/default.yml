@@ -31,6 +31,6 @@ jobs:
                 package-name: >
                     gsof_msgs
                     trimble_interfaces
-                    trimble_driver_ros
+                    trimble_driver
                 target-ros2-distro: jazzy
                 import-token: ${{ secrets.GITHUB_TOKEN }}
