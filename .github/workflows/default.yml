@@ -12,7 +12,7 @@ jobs:
             matrix:
                 os:
                     - ubuntu-latest
-                    - ubuntu-latest-arm
+                    - ubuntu-22.04-arm
         runs-on: ${{ matrix.os }}
         container:
             image: rostooling/setup-ros-docker:ubuntu-noble-latest
