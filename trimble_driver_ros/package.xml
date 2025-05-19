@@ -5,12 +5,12 @@
   -->
 
 <package format="3">
-  <name>trimble_driver_ros</name>
+  <name>trimble_driver</name>
   <version>0.1.0</version>
   <description>Connect Trimble products publishing GSOF data to ROS.</description>
 
   <maintainer email="andre_nguyen@trimble.com">Andre Nguyen</maintainer>
-  <license>BSD</license>
+  <license>BSD-2-Clause</license>
   <author email="andre_nguyen@trimble.com">Andre Nguyen</author>
 
   <buildtool_depend>ament_cmake_ros</buildtool_depend>

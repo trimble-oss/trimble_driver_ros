@@ -92,13 +92,13 @@ source ~/colcon_ws/install/setup.bash
 ### ros2 launch
 Launch the gsof client node using
 ```
-ros2 launch trimble_driver_ros gsof_client.py
+ros2 launch trimble_driver gsof_client.py
 ```
 
 ### ros2 run
 Alternatively you can run the node directly while specifying the parameters at the command line.
 ```
-ros2 run trimble_driver_ros gsof_client_node --ros-args -p ip:=0.0.0.0 -p port:=5017
+ros2 run trimble_driver gsof_client_node --ros-args -p ip:=0.0.0.0 -p port:=5017
 ```
 
 # Node Documentation
