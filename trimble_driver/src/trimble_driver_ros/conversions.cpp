@@ -593,7 +593,8 @@ trimble_gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandSt
   return lband_ros;
 }
 
-trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &ind) {
+trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(
+    const trmb::gsof::BasePositionAndQualityIndicator &ind) {
   trmb::gsof::GpsTime gps_time{ind.gps_week_number, ind.gps_time_ms};
   trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 ind_ros;
   ind_ros.header.stamp = toRosTimeOfTheWeek(gps_time);
@@ -625,7 +626,8 @@ trimble_gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::Navi
   return sol;
 }
 
-trimble_gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &ins_solution_rms) {
+trimble_gsof_msgs::msg::NavigationPerformance50 toRosMessage(
+    const trmb::gsof::NavigationPerformance &ins_solution_rms) {
   trimble_gsof_msgs::msg::NavigationPerformance50 ros_rms;
   ros_rms.header.stamp               = toRosTimeOfTheWeek(ins_solution_rms.gps_time);
   ros_rms.gps_time                   = toRosMessage(ins_solution_rms.gps_time);
