@@ -5,9 +5,9 @@
 
 #include "trimble_driver_ros/gsof_client_ros.h"
 
+#include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <trimble_gsof_msgs/msg/navigation_performance50.hpp>
 #include <trimble_gsof_msgs/msg/navigation_solution49.hpp>
-#include <sensor_msgs/msg/nav_sat_fix.hpp>
 
 namespace trmb_ros {
 
@@ -134,8 +134,7 @@ void GsofClientRos::registerAllSupportedGsofMessageCallbacks() {
       &GsofClientRos::publishGsofMessage<gsof_msgs::TangentPlaneDelta7, TangentPlaneDelta, GSOF_ID_7_TPLANE_ENU>);
   registerCallback(GSOF_ID_8_VELOCITY,
                    &GsofClientRos::publishGsofMessage<gsof_msgs::Velocity8, Velocity, GSOF_ID_8_VELOCITY>);
-  registerCallback(GSOF_ID_9_DOP,
-                   &GsofClientRos::publishGsofMessage<gsof_msgs::PdopInfo9, PdopInfo, GSOF_ID_9_DOP>);
+  registerCallback(GSOF_ID_9_DOP, &GsofClientRos::publishGsofMessage<gsof_msgs::PdopInfo9, PdopInfo, GSOF_ID_9_DOP>);
   registerCallback(GSOF_ID_10_CLOCK_INFO,
                    &GsofClientRos::publishGsofMessage<gsof_msgs::ClockInfo10, ClockInfo, GSOF_ID_10_CLOCK_INFO>);
   registerCallback(
@@ -147,15 +146,12 @@ void GsofClientRos::registerAllSupportedGsofMessageCallbacks() {
   registerCallback(GSOF_ID_15_REC_SERIAL_NUM,
                    &GsofClientRos::publishGsofMessage<gsof_msgs::ReceiverSerialNumber15, ReceiverSerialNumber,
                                                       GSOF_ID_15_REC_SERIAL_NUM>);
-  registerCallback(
-      GSOF_ID_16_CURR_TIME,
-      &GsofClientRos::publishGsofMessage<gsof_msgs::CurrentTime16, CurrentTime, GSOF_ID_16_CURR_TIME>);
-  registerCallback(
-      GSOF_ID_27_ATTITUDE,
-      &GsofClientRos::publishGsofMessage<gsof_msgs::AttitudeInfo27, AttitudeInfo, GSOF_ID_27_ATTITUDE>);
-  registerCallback(
-      GSOF_ID_33_ALL_SV_BRIEF,
-      &GsofClientRos::publishGsofMessage<gsof_msgs::AllSvBrief33, AllSvBrief, GSOF_ID_33_ALL_SV_BRIEF>);
+  registerCallback(GSOF_ID_16_CURR_TIME,
+                   &GsofClientRos::publishGsofMessage<gsof_msgs::CurrentTime16, CurrentTime, GSOF_ID_16_CURR_TIME>);
+  registerCallback(GSOF_ID_27_ATTITUDE,
+                   &GsofClientRos::publishGsofMessage<gsof_msgs::AttitudeInfo27, AttitudeInfo, GSOF_ID_27_ATTITUDE>);
+  registerCallback(GSOF_ID_33_ALL_SV_BRIEF,
+                   &GsofClientRos::publishGsofMessage<gsof_msgs::AllSvBrief33, AllSvBrief, GSOF_ID_33_ALL_SV_BRIEF>);
   registerCallback(
       GSOF_ID_34_ALL_SV_DETAIL,
       &GsofClientRos::publishGsofMessage<gsof_msgs::AllSvDetailed34, AllSvDetailed, GSOF_ID_34_ALL_SV_DETAIL>);
@@ -166,18 +162,18 @@ void GsofClientRos::registerAllSupportedGsofMessageCallbacks() {
                    &GsofClientRos::publishGsofMessage<gsof_msgs::BatteryMemoryInfo37, BatteryMemoryInfo,
                                                       GSOF_ID_37_BATTERY_MEM_INFO>);
   registerCallback(GSOF_ID_38_POSITION_TYPE_INFO,
-                   &GsofClientRos::publishGsofMessage<gsof_msgs::PositionTypeInformation38,
-                                                      PositionTypeInformation, GSOF_ID_38_POSITION_TYPE_INFO>);
+                   &GsofClientRos::publishGsofMessage<gsof_msgs::PositionTypeInformation38, PositionTypeInformation,
+                                                      GSOF_ID_38_POSITION_TYPE_INFO>);
   registerCallback(
       GSOF_ID_40_LBAND_STATUS,
       &GsofClientRos::publishGsofMessage<gsof_msgs::LbandStatusInfo40, LbandStatusInfo, GSOF_ID_40_LBAND_STATUS>);
   registerCallback(
       GSOF_ID_41_BASE_POSITION_QUALITY,
-      &GsofClientRos::publishGsofMessage<gsof_msgs::BasePositionAndQualityIndicator41,
-                                         BasePositionAndQualityIndicator, GSOF_ID_41_BASE_POSITION_QUALITY>);
-  registerCallback(GSOF_ID_49_INS_FULL_NAV,
-                   &GsofClientRos::publishGsofMessage<gsof_msgs::NavigationSolution49, NavigationSolution,
-                                                      GSOF_ID_49_INS_FULL_NAV>);
+      &GsofClientRos::publishGsofMessage<gsof_msgs::BasePositionAndQualityIndicator41, BasePositionAndQualityIndicator,
+                                         GSOF_ID_41_BASE_POSITION_QUALITY>);
+  registerCallback(
+      GSOF_ID_49_INS_FULL_NAV,
+      &GsofClientRos::publishGsofMessage<gsof_msgs::NavigationSolution49, NavigationSolution, GSOF_ID_49_INS_FULL_NAV>);
   registerCallback(GSOF_ID_50_INS_RMS,
                    &GsofClientRos::publishGsofMessage<gsof_msgs::NavigationPerformance50, NavigationPerformance,
                                                       GSOF_ID_50_INS_RMS>);

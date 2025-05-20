@@ -8,6 +8,9 @@
 #include <GeographicLib/LocalCartesian.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
+#include <nav_msgs/msg/odometry.hpp>
+#include <rclcpp/time.hpp>
+#include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <trimble_gsof_msgs/msg/all_sv_brief33.hpp>
 #include <trimble_gsof_msgs/msg/all_sv_detailed34.hpp>
 #include <trimble_gsof_msgs/msg/attitude_info27.hpp>
@@ -32,9 +35,6 @@
 #include <trimble_gsof_msgs/msg/receiver_serial_number15.hpp>
 #include <trimble_gsof_msgs/msg/tangent_plane_delta7.hpp>
 #include <trimble_gsof_msgs/msg/velocity8.hpp>
-#include <nav_msgs/msg/odometry.hpp>
-#include <rclcpp/time.hpp>
-#include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <type_traits>
 
 #include "trimble_driver/gsof/message.h"
@@ -205,7 +205,8 @@ trimble_gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::Receiv
 trimble_gsof_msgs::msg::BatteryMemoryInfo37 toRosMessage(const trmb::gsof::BatteryMemoryInfo &);
 trimble_gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::PositionTypeInformation &);
 trimble_gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo &);
-trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &);
+trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(
+    const trmb::gsof::BasePositionAndQualityIndicator &);
 trimble_gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSolution &);
 trimble_gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &);
 trimble_gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullNavInfo &);
