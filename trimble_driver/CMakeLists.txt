@@ -40,7 +40,6 @@ set(COMMON_COMPILE_FLAGS
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
-find_package(gsof_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -49,8 +48,9 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(trimble_gsof_msgs REQUIRED)
 find_package(trimble_interfaces REQUIRED)
 
 if (CODE_COVERAGE)
@@ -102,11 +102,9 @@ install(EXPORT ${PROJECT_NAME}Targets
 
 ament_export_targets(${PROJECT_NAME}Targets HAS_LIBRARY_TARGET)
 ament_export_dependencies(
-  Threads
   ament_cmake 
   ament_cmake_ros
   diagnostic_msgs 
-  gsof_msgs 
   geometry_msgs
   nav_msgs 
   rclcpp 
@@ -115,9 +113,12 @@ ament_export_dependencies(
   std_msgs 
   std_srvs
   tf2
-  tf2_ros
   tf2_geometry_msgs
-  trimble_interfaces)
+  tf2_ros
+  Threads
+  trimble_gsof_msgs 
+  trimble_interfaces
+)
 ament_package(CONFIG_EXTRAS
   cmake/FindGMock.cmake
   cmake/FindPCAP.cmake)

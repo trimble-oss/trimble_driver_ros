@@ -13,18 +13,17 @@ trmb_cc_lib(
 
 ament_target_dependencies(ros_conversions
   PUBLIC
-    gsof_msgs
     GeographicLib
     geometry_msgs
     nav_msgs
     rclcpp
     sensor_msgs
     tf2_geometry_msgs
+    trimble_gsof_msgs
 )
 
 set(CLIENT_LIBRARIES
     diagnostic_msgs
-    gsof_msgs
     GeographicLib
     nav_msgs
     rclcpp
@@ -34,6 +33,7 @@ set(CLIENT_LIBRARIES
     tf2
     tf2_geometry_msgs
     tf2_ros
+    trimble_gsof_msgs
     trimble_interfaces
 )
 

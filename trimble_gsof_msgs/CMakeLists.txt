@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gsof_msgs)
+project(trimble_gsof_msgs)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)

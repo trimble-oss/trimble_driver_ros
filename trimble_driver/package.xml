@@ -21,7 +21,7 @@
   <depend>libpcap</depend>
 
   <depend>diagnostic_msgs</depend>
-  <depend>gsof_msgs</depend>
+  <depend>trimble_gsof_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>rclcpp</depend>

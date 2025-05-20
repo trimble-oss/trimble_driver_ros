@@ -286,40 +286,40 @@ sensor_msgs::msg::NavSatStatus toNavSatStatus(const trmb::gsof::PositionTimeInfo
 }
 
 namespace gsof {
-gsof_msgs::msg::Vector3f toVector3f(const trmb::Xyzf &xyz) {
-  gsof_msgs::msg::Vector3f v;
+trimble_gsof_msgs::msg::Vector3f toVector3f(const trmb::Xyzf &xyz) {
+  trimble_gsof_msgs::msg::Vector3f v;
   v.x = xyz.x;
   v.y = xyz.y;
   v.z = xyz.z;
   return v;
 }
 
-gsof_msgs::msg::EastNorthUpd toRosMessage(const trmb::Enud &enu) {
-  gsof_msgs::msg::EastNorthUpd enu_ros;
+trimble_gsof_msgs::msg::EastNorthUpd toRosMessage(const trmb::Enud &enu) {
+  trimble_gsof_msgs::msg::EastNorthUpd enu_ros;
   enu_ros.east  = enu.east;
   enu_ros.north = enu.north;
   enu_ros.up    = enu.up;
   return enu_ros;
 }
 
-gsof_msgs::msg::EulerAngle toRosMessage(const trmb::Pyrd &pyr) {
-  gsof_msgs::msg::EulerAngle e;
+trimble_gsof_msgs::msg::EulerAngle toRosMessage(const trmb::Pyrd &pyr) {
+  trimble_gsof_msgs::msg::EulerAngle e;
   e.pitch = pyr.pitch;
   e.roll  = pyr.roll;
   e.yaw   = pyr.yaw;
   return e;
 }
 
-gsof_msgs::msg::LatLongAltitude toRosLla(const trmb::Llad &lla) {
-  gsof_msgs::msg::LatLongAltitude l_ros;
+trimble_gsof_msgs::msg::LatLongAltitude toRosLla(const trmb::Llad &lla) {
+  trimble_gsof_msgs::msg::LatLongAltitude l_ros;
   l_ros.latitude  = lla.latitude;
   l_ros.longitude = lla.longitude;
   l_ros.altitude  = lla.altitude;
   return l_ros;
 }
 
-gsof_msgs::msg::LatLongHeight toRosLlh(const trmb::Llad &lla) {
-  gsof_msgs::msg::LatLongHeight l_ros;
+trimble_gsof_msgs::msg::LatLongHeight toRosLlh(const trmb::Llad &lla) {
+  trimble_gsof_msgs::msg::LatLongHeight l_ros;
   l_ros.latitude  = lla.latitude;
   l_ros.longitude = lla.longitude;
   l_ros.height    = lla.altitude;
@@ -327,29 +327,29 @@ gsof_msgs::msg::LatLongHeight toRosLlh(const trmb::Llad &lla) {
 }
 }  // namespace gsof
 
-gsof_msgs::msg::GpsTime toRosMessage(const trmb::gsof::GpsTime &gps_time) {
-  gsof_msgs::msg::GpsTime gps_time_gsof;
+trimble_gsof_msgs::msg::GpsTime toRosMessage(const trmb::gsof::GpsTime &gps_time) {
+  trimble_gsof_msgs::msg::GpsTime gps_time_gsof;
   gps_time_gsof.time = gps_time.time_msec;
   gps_time_gsof.week = gps_time.week;
   return gps_time_gsof;
 }
 
-gsof_msgs::msg::Status toRosMessage(const trmb::gsof::Status &status) {
-  gsof_msgs::msg::Status status_gsof;
+trimble_gsof_msgs::msg::Status toRosMessage(const trmb::gsof::Status &status) {
+  trimble_gsof_msgs::msg::Status status_gsof;
   status_gsof.gnss          = status.gnss;
   status_gsof.imu_alignment = status.imu_alignment;
   return status_gsof;
 }
 
-gsof_msgs::msg::Status toRosMessage(const trmb::gsof::VnavStatus &status) {
-  gsof_msgs::msg::Status status_gsof;
+trimble_gsof_msgs::msg::Status toRosMessage(const trmb::gsof::VnavStatus &status) {
+  trimble_gsof_msgs::msg::Status status_gsof;
   status_gsof.gnss          = status.gps_quality;
   status_gsof.imu_alignment = status.imu_alignment;
   return status_gsof;
 }
 
-gsof_msgs::msg::PositionTimeInfo1 toRosMessage(const trmb::gsof::PositionTimeInfo &p) {
-  gsof_msgs::msg::PositionTimeInfo1 p_ros;
+trimble_gsof_msgs::msg::PositionTimeInfo1 toRosMessage(const trmb::gsof::PositionTimeInfo &p) {
+  trimble_gsof_msgs::msg::PositionTimeInfo1 p_ros;
   p_ros.header.stamp               = toRosTimeOfTheWeek(trmb::gsof::GpsTime{p.gps_week, p.gps_time_ms});
   p_ros.number_space_vehicles_used = p.number_space_vehicles_used;
   p_ros.position_flags_1           = p.position_flags_1;
@@ -360,32 +360,32 @@ gsof_msgs::msg::PositionTimeInfo1 toRosMessage(const trmb::gsof::PositionTimeInf
   return p_ros;
 }
 
-gsof_msgs::msg::LatLongHeight2 toRosMessage(const trmb::gsof::LatLongHeight &l) {
-  gsof_msgs::msg::LatLongHeight2 l_ros;
+trimble_gsof_msgs::msg::LatLongHeight2 toRosMessage(const trmb::gsof::LatLongHeight &l) {
+  trimble_gsof_msgs::msg::LatLongHeight2 l_ros;
   l_ros.llh = gsof::toRosLlh(l.lla);
   return l_ros;
 }
 
-gsof_msgs::msg::EcefPosition3 toRosMessage(const trmb::gsof::EcefPosition &p) {
-  gsof_msgs::msg::EcefPosition3 p_ros;
+trimble_gsof_msgs::msg::EcefPosition3 toRosMessage(const trmb::gsof::EcefPosition &p) {
+  trimble_gsof_msgs::msg::EcefPosition3 p_ros;
   p_ros.position = toVector(p.pos);
   return p_ros;
 }
 
-gsof_msgs::msg::EcefDelta6 toRosMessage(const trmb::gsof::EcefDelta &p) {
-  gsof_msgs::msg::EcefDelta6 p_ros;
+trimble_gsof_msgs::msg::EcefDelta6 toRosMessage(const trmb::gsof::EcefDelta &p) {
+  trimble_gsof_msgs::msg::EcefDelta6 p_ros;
   p_ros.delta = toVector(p.delta);
   return p_ros;
 }
 
-gsof_msgs::msg::TangentPlaneDelta7 toRosMessage(const trmb::gsof::TangentPlaneDelta &t) {
-  gsof_msgs::msg::TangentPlaneDelta7 t_ros;
+trimble_gsof_msgs::msg::TangentPlaneDelta7 toRosMessage(const trmb::gsof::TangentPlaneDelta &t) {
+  trimble_gsof_msgs::msg::TangentPlaneDelta7 t_ros;
   t_ros.delta = gsof::toRosMessage(t.enu);
   return t_ros;
 }
 
-gsof_msgs::msg::Velocity8 toRosMessage(const trmb::gsof::Velocity &v) {
-  gsof_msgs::msg::Velocity8 v_ros;
+trimble_gsof_msgs::msg::Velocity8 toRosMessage(const trmb::gsof::Velocity &v) {
+  trimble_gsof_msgs::msg::Velocity8 v_ros;
   v_ros.velocity       = v.velocity;
   v_ros.velocity_flags = v.velocity_flags;
   v_ros.heading        = v.heading;
@@ -393,8 +393,8 @@ gsof_msgs::msg::Velocity8 toRosMessage(const trmb::gsof::Velocity &v) {
   return v_ros;
 }
 
-gsof_msgs::msg::PdopInfo9 toRosMessage(const trmb::gsof::PdopInfo &p) {
-  gsof_msgs::msg::PdopInfo9 p_ros;
+trimble_gsof_msgs::msg::PdopInfo9 toRosMessage(const trmb::gsof::PdopInfo &p) {
+  trimble_gsof_msgs::msg::PdopInfo9 p_ros;
   p_ros.position_dop    = p.position_dop;
   p_ros.horiziontal_dop = p.horiziontal_dop;
   p_ros.time_dop        = p.time_dop;
@@ -402,16 +402,16 @@ gsof_msgs::msg::PdopInfo9 toRosMessage(const trmb::gsof::PdopInfo &p) {
   return p_ros;
 }
 
-gsof_msgs::msg::ClockInfo10 toRosMessage(const trmb::gsof::ClockInfo &c) {
-  gsof_msgs::msg::ClockInfo10 c_ros;
+trimble_gsof_msgs::msg::ClockInfo10 toRosMessage(const trmb::gsof::ClockInfo &c) {
+  trimble_gsof_msgs::msg::ClockInfo10 c_ros;
   c_ros.clock_offset = c.clock_offset;
   c_ros.clock_flags  = c.clock_flags;
   c_ros.freq_offset  = c.freq_offset;
   return c_ros;
 }
 
-gsof_msgs::msg::PositionVcvInfo11 toRosMessage(const trmb::gsof::PositionVcvInfo &p) {
-  gsof_msgs::msg::PositionVcvInfo11 p_ros;
+trimble_gsof_msgs::msg::PositionVcvInfo11 toRosMessage(const trmb::gsof::PositionVcvInfo &p) {
+  trimble_gsof_msgs::msg::PositionVcvInfo11 p_ros;
   p_ros.position_rms = p.position_rms;
   p_ros.xx           = p.xx;
   p_ros.xy           = p.xy;
@@ -424,8 +424,8 @@ gsof_msgs::msg::PositionVcvInfo11 toRosMessage(const trmb::gsof::PositionVcvInfo
   return p_ros;
 }
 
-gsof_msgs::msg::PositionSigmaInfo12 toRosMessage(const trmb::gsof::PositionSigmaInfo &p) {
-  gsof_msgs::msg::PositionSigmaInfo12 p_ros;
+trimble_gsof_msgs::msg::PositionSigmaInfo12 toRosMessage(const trmb::gsof::PositionSigmaInfo &p) {
+  trimble_gsof_msgs::msg::PositionSigmaInfo12 p_ros;
   p_ros.position_rms          = p.position_rms;
   p_ros.sigma_east            = p.sigma_east;
   p_ros.sigma_north           = p.sigma_north;
@@ -439,14 +439,14 @@ gsof_msgs::msg::PositionSigmaInfo12 toRosMessage(const trmb::gsof::PositionSigma
   return p_ros;
 }
 
-gsof_msgs::msg::ReceiverSerialNumber15 toRosMessage(const trmb::gsof::ReceiverSerialNumber &r) {
-  gsof_msgs::msg::ReceiverSerialNumber15 r_ros;
+trimble_gsof_msgs::msg::ReceiverSerialNumber15 toRosMessage(const trmb::gsof::ReceiverSerialNumber &r) {
+  trimble_gsof_msgs::msg::ReceiverSerialNumber15 r_ros;
   r_ros.number = r.number;
   return r_ros;
 }
 
-gsof_msgs::msg::CurrentTime16 toRosMessage(const trmb::gsof::CurrentTime &c) {
-  gsof_msgs::msg::CurrentTime16 c_ros;
+trimble_gsof_msgs::msg::CurrentTime16 toRosMessage(const trmb::gsof::CurrentTime &c) {
+  trimble_gsof_msgs::msg::CurrentTime16 c_ros;
   c_ros.header.stamp = toRosTimeOfTheWeek(trmb::gsof::GpsTime{c.gps_week, c.gps_ms_week});
   c_ros.gps_time     = toRosMessage(trmb::gsof::GpsTime{c.gps_week, c.gps_ms_week});
   c_ros.utc_offset   = c.utc_offset;
@@ -454,8 +454,8 @@ gsof_msgs::msg::CurrentTime16 toRosMessage(const trmb::gsof::CurrentTime &c) {
   return c_ros;
 }
 
-gsof_msgs::msg::AttitudeVariance toRosMessage(const trmb::gsof::AttitudeInfo::Variance &v) {
-  gsof_msgs::msg::AttitudeVariance v_ros;
+trimble_gsof_msgs::msg::AttitudeVariance toRosMessage(const trmb::gsof::AttitudeInfo::Variance &v) {
+  trimble_gsof_msgs::msg::AttitudeVariance v_ros;
   v_ros.pitch              = v.pitch;
   v_ros.yaw                = v.yaw;
   v_ros.roll               = v.roll;
@@ -466,8 +466,8 @@ gsof_msgs::msg::AttitudeVariance toRosMessage(const trmb::gsof::AttitudeInfo::Va
   return v_ros;
 }
 
-gsof_msgs::msg::AttitudeInfo27 toRosMessage(const trmb::gsof::AttitudeInfo &a) {
-  gsof_msgs::msg::AttitudeInfo27 a_ros;
+trimble_gsof_msgs::msg::AttitudeInfo27 toRosMessage(const trmb::gsof::AttitudeInfo &a) {
+  trimble_gsof_msgs::msg::AttitudeInfo27 a_ros;
   a_ros.gps_time_of_week          = a.gps_time;
   a_ros.flags                     = a.flags;
   a_ros.number_space_vehicles     = a.num_svs;
@@ -484,8 +484,8 @@ gsof_msgs::msg::AttitudeInfo27 toRosMessage(const trmb::gsof::AttitudeInfo &a) {
   return a_ros;
 }
 
-gsof_msgs::msg::SpaceVehicleBriefInfo toRosMessage(const trmb::gsof::SVBriefInfo &info) {
-  gsof_msgs::msg::SpaceVehicleBriefInfo info_ros;
+trimble_gsof_msgs::msg::SpaceVehicleBriefInfo toRosMessage(const trmb::gsof::SVBriefInfo &info) {
+  trimble_gsof_msgs::msg::SpaceVehicleBriefInfo info_ros;
   info_ros.prn       = info.prn;
   info_ros.sv_system = info.sv_system;
   info_ros.sv_flags1 = info.sv_flags1;
@@ -493,8 +493,8 @@ gsof_msgs::msg::SpaceVehicleBriefInfo toRosMessage(const trmb::gsof::SVBriefInfo
   return info_ros;
 }
 
-gsof_msgs::msg::AllSvBrief33 toRosMessage(const trmb::gsof::AllSvBrief &all_sv) {
-  gsof_msgs::msg::AllSvBrief33 sv_ros;
+trimble_gsof_msgs::msg::AllSvBrief33 toRosMessage(const trmb::gsof::AllSvBrief &all_sv) {
+  trimble_gsof_msgs::msg::AllSvBrief33 sv_ros;
   sv_ros.sv_info.reserve(all_sv.num_svs);
   for (const auto &sv : all_sv.sv_info) {
     sv_ros.sv_info.emplace_back(toRosMessage(sv));
@@ -502,8 +502,8 @@ gsof_msgs::msg::AllSvBrief33 toRosMessage(const trmb::gsof::AllSvBrief &all_sv) 
   return sv_ros;
 }
 
-gsof_msgs::msg::SpaceVehicleDetailedInfo toRosMessage(const trmb::gsof::SVDetailedInfo &info) {
-  gsof_msgs::msg::SpaceVehicleDetailedInfo info_ros;
+trimble_gsof_msgs::msg::SpaceVehicleDetailedInfo toRosMessage(const trmb::gsof::SVDetailedInfo &info) {
+  trimble_gsof_msgs::msg::SpaceVehicleDetailedInfo info_ros;
   info_ros.prn       = info.prn;
   info_ros.sv_system = info.sv_system;
   info_ros.sv_flags1 = info.sv_flags1;
@@ -516,8 +516,8 @@ gsof_msgs::msg::SpaceVehicleDetailedInfo toRosMessage(const trmb::gsof::SVDetail
   return info_ros;
 }
 
-gsof_msgs::msg::AllSvDetailed34 toRosMessage(const trmb::gsof::AllSvDetailed &all_sv) {
-  gsof_msgs::msg::AllSvDetailed34 all_sv_ros;
+trimble_gsof_msgs::msg::AllSvDetailed34 toRosMessage(const trmb::gsof::AllSvDetailed &all_sv) {
+  trimble_gsof_msgs::msg::AllSvDetailed34 all_sv_ros;
   all_sv_ros.sv_info.reserve(all_sv.num_svs);
   for (const auto &sv : all_sv.sv_info) {
     all_sv_ros.sv_info.emplace_back(toRosMessage(sv));
@@ -525,8 +525,8 @@ gsof_msgs::msg::AllSvDetailed34 toRosMessage(const trmb::gsof::AllSvDetailed &al
   return all_sv_ros;
 }
 
-gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::ReceivedBaseInfo &info) {
-  gsof_msgs::msg::ReceivedBaseInfo35 info_ros;
+trimble_gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::ReceivedBaseInfo &info) {
+  trimble_gsof_msgs::msg::ReceivedBaseInfo35 info_ros;
   info_ros.flags = info.flags;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
@@ -537,15 +537,15 @@ gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::ReceivedBaseIn
   return info_ros;
 }
 
-gsof_msgs::msg::BatteryMemoryInfo37 toRosMessage(const trmb::gsof::BatteryMemoryInfo &info) {
-  gsof_msgs::msg::BatteryMemoryInfo37 info_ros;
+trimble_gsof_msgs::msg::BatteryMemoryInfo37 toRosMessage(const trmb::gsof::BatteryMemoryInfo &info) {
+  trimble_gsof_msgs::msg::BatteryMemoryInfo37 info_ros;
   info_ros.battery_capacity            = info.battery_cap;
   info_ros.remaining_data_logging_time = info.remaining_time;
   return info_ros;
 }
 
-gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::PositionTypeInformation &info) {
-  gsof_msgs::msg::PositionTypeInformation38 info_ros;
+trimble_gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::PositionTypeInformation &info) {
+  trimble_gsof_msgs::msg::PositionTypeInformation38 info_ros;
   info_ros.error_scale              = info.error_scale;
   info_ros.solution_flags           = info.solution_flags;
   info_ros.rtk_condition            = info.rtk_condition;
@@ -562,8 +562,8 @@ gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::Positio
   return info_ros;
 }
 
-gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo &lband) {
-  gsof_msgs::msg::LbandStatusInfo40 lband_ros;
+trimble_gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo &lband) {
+  trimble_gsof_msgs::msg::LbandStatusInfo40 lband_ros;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
   std::copy(lband.satellite_name.cbegin(), lband.satellite_name.cend(), lband_ros.satellite_name.begin());
@@ -593,9 +593,9 @@ gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo
   return lband_ros;
 }
 
-gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &ind) {
+trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &ind) {
   trmb::gsof::GpsTime gps_time{ind.gps_week_number, ind.gps_time_ms};
-  gsof_msgs::msg::BasePositionAndQualityIndicator41 ind_ros;
+  trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 ind_ros;
   ind_ros.header.stamp = toRosTimeOfTheWeek(gps_time);
   ind_ros.llh          = gsof::toRosLlh(ind.llh);
   ind_ros.gps_time     = toRosMessage(gps_time);
@@ -603,8 +603,8 @@ gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof:
   return ind_ros;
 }
 
-gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSolution &ins_solution) {
-  gsof_msgs::msg::NavigationSolution49 sol;
+trimble_gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSolution &ins_solution) {
+  trimble_gsof_msgs::msg::NavigationSolution49 sol;
   sol.header.stamp   = toRosTimeOfTheWeek(ins_solution.gps_time);
   sol.gps_time       = toRosMessage(ins_solution.gps_time);
   sol.status         = toRosMessage(ins_solution.status);
@@ -625,8 +625,8 @@ gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSo
   return sol;
 }
 
-gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &ins_solution_rms) {
-  gsof_msgs::msg::NavigationPerformance50 ros_rms;
+trimble_gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &ins_solution_rms) {
+  trimble_gsof_msgs::msg::NavigationPerformance50 ros_rms;
   ros_rms.header.stamp               = toRosTimeOfTheWeek(ins_solution_rms.gps_time);
   ros_rms.gps_time                   = toRosMessage(ins_solution_rms.gps_time);
   ros_rms.status                     = toRosMessage(ins_solution_rms.status);
@@ -638,8 +638,8 @@ gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::Navigatio
   return ros_rms;
 }
 
-gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullNavInfo &nav) {
-  gsof_msgs::msg::InsVnavFullNavInfo63 nav_ros;
+trimble_gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullNavInfo &nav) {
+  trimble_gsof_msgs::msg::InsVnavFullNavInfo63 nav_ros;
   nav_ros.header.stamp = toRosTimeOfTheWeek(nav.gps_time);
   nav_ros.gps_time     = toRosMessage(nav.gps_time);
   nav_ros.status       = toRosMessage(nav.status);
@@ -657,8 +657,8 @@ gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullN
   return nav_ros;
 }
 
-gsof_msgs::msg::InsVnavRmsInfo64 toRosMessage(const trmb::gsof::InsVnavRmsInfo &rms) {
-  gsof_msgs::msg::InsVnavRmsInfo64 rms_ros;
+trimble_gsof_msgs::msg::InsVnavRmsInfo64 toRosMessage(const trmb::gsof::InsVnavRmsInfo &rms) {
+  trimble_gsof_msgs::msg::InsVnavRmsInfo64 rms_ros;
   rms_ros.gps_time               = toRosMessage(rms.gps_time);
   rms_ros.status                 = toRosMessage(rms.status);
   rms_ros.position_rms_meters    = gsof::toRosMessage(rms.position_rms);
