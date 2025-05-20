@@ -75,12 +75,12 @@ git_hook () {
 
 excludes=(
     # Add paths to excluded files here
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/compact_optional.h" \
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/optional_common.h" \
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/optional.h" \
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/wise_enum_detail.h" \
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/wise_enum_generated.h" \
-    "./trimble_driver_ros/include/trimble_driver/util/wise_enum/wise_enum.h"
+    "./trimble_driver/include/trimble_driver/util/wise_enum/compact_optional.h" \
+    "./trimble_driver/include/trimble_driver/util/wise_enum/optional_common.h" \
+    "./trimble_driver/include/trimble_driver/util/wise_enum/optional.h" \
+    "./trimble_driver/include/trimble_driver/util/wise_enum/wise_enum_detail.h" \
+    "./trimble_driver/include/trimble_driver/util/wise_enum/wise_enum_generated.h" \
+    "./trimble_driver/include/trimble_driver/util/wise_enum/wise_enum.h"
     )
 
 
