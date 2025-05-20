@@ -29,8 +29,8 @@ jobs:
             - uses: ros-tooling/action-ros-ci@0.4.3
               with:
                 package-name: >
-                    gsof_msgs
-                    trimble_interfaces
                     trimble_driver
+                    trimble_gsof_msgs
+                    trimble_interfaces
                 target-ros2-distro: jazzy
                 import-token: ${{ secrets.GITHUB_TOKEN }}
