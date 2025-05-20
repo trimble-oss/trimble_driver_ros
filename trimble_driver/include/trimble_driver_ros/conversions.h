@@ -8,30 +8,30 @@
 #include <GeographicLib/LocalCartesian.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
-#include <gsof_msgs/msg/all_sv_brief33.hpp>
-#include <gsof_msgs/msg/all_sv_detailed34.hpp>
-#include <gsof_msgs/msg/attitude_info27.hpp>
-#include <gsof_msgs/msg/base_position_and_quality_indicator41.hpp>
-#include <gsof_msgs/msg/battery_memory_info37.hpp>
-#include <gsof_msgs/msg/clock_info10.hpp>
-#include <gsof_msgs/msg/current_time16.hpp>
-#include <gsof_msgs/msg/ecef_delta6.hpp>
-#include <gsof_msgs/msg/ecef_position3.hpp>
-#include <gsof_msgs/msg/ins_vnav_full_nav_info63.hpp>
-#include <gsof_msgs/msg/ins_vnav_rms_info64.hpp>
-#include <gsof_msgs/msg/lat_long_height2.hpp>
-#include <gsof_msgs/msg/lband_status_info40.hpp>
-#include <gsof_msgs/msg/navigation_performance50.hpp>
-#include <gsof_msgs/msg/navigation_solution49.hpp>
-#include <gsof_msgs/msg/pdop_info9.hpp>
-#include <gsof_msgs/msg/position_sigma_info12.hpp>
-#include <gsof_msgs/msg/position_time_info1.hpp>
-#include <gsof_msgs/msg/position_type_information38.hpp>
-#include <gsof_msgs/msg/position_vcv_info11.hpp>
-#include <gsof_msgs/msg/received_base_info35.hpp>
-#include <gsof_msgs/msg/receiver_serial_number15.hpp>
-#include <gsof_msgs/msg/tangent_plane_delta7.hpp>
-#include <gsof_msgs/msg/velocity8.hpp>
+#include <trimble_gsof_msgs/msg/all_sv_brief33.hpp>
+#include <trimble_gsof_msgs/msg/all_sv_detailed34.hpp>
+#include <trimble_gsof_msgs/msg/attitude_info27.hpp>
+#include <trimble_gsof_msgs/msg/base_position_and_quality_indicator41.hpp>
+#include <trimble_gsof_msgs/msg/battery_memory_info37.hpp>
+#include <trimble_gsof_msgs/msg/clock_info10.hpp>
+#include <trimble_gsof_msgs/msg/current_time16.hpp>
+#include <trimble_gsof_msgs/msg/ecef_delta6.hpp>
+#include <trimble_gsof_msgs/msg/ecef_position3.hpp>
+#include <trimble_gsof_msgs/msg/ins_vnav_full_nav_info63.hpp>
+#include <trimble_gsof_msgs/msg/ins_vnav_rms_info64.hpp>
+#include <trimble_gsof_msgs/msg/lat_long_height2.hpp>
+#include <trimble_gsof_msgs/msg/lband_status_info40.hpp>
+#include <trimble_gsof_msgs/msg/navigation_performance50.hpp>
+#include <trimble_gsof_msgs/msg/navigation_solution49.hpp>
+#include <trimble_gsof_msgs/msg/pdop_info9.hpp>
+#include <trimble_gsof_msgs/msg/position_sigma_info12.hpp>
+#include <trimble_gsof_msgs/msg/position_time_info1.hpp>
+#include <trimble_gsof_msgs/msg/position_type_information38.hpp>
+#include <trimble_gsof_msgs/msg/position_vcv_info11.hpp>
+#include <trimble_gsof_msgs/msg/received_base_info35.hpp>
+#include <trimble_gsof_msgs/msg/receiver_serial_number15.hpp>
+#include <trimble_gsof_msgs/msg/tangent_plane_delta7.hpp>
+#include <trimble_gsof_msgs/msg/velocity8.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <rclcpp/time.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
@@ -151,8 +151,8 @@ geometry_msgs::msg::Vector3 toVector(const trmb::Rph<Scalar> &rph) {
 
 namespace gsof {
 template <typename T>
-gsof_msgs::msg::LatLongAltitude toRosMessage(const trmb::Lla<T> &lla) {
-  gsof_msgs::msg::LatLongAltitude ros_lla;
+trimble_gsof_msgs::msg::LatLongAltitude toRosMessage(const trmb::Lla<T> &lla) {
+  trimble_gsof_msgs::msg::LatLongAltitude ros_lla;
   ros_lla.latitude  = lla.latitude;
   ros_lla.longitude = lla.longitude;
   ros_lla.altitude  = lla.altitude;
@@ -160,55 +160,55 @@ gsof_msgs::msg::LatLongAltitude toRosMessage(const trmb::Lla<T> &lla) {
 }
 
 template <typename T>
-gsof_msgs::msg::NorthEastDownf toRosMessage(const trmb::Ned<T> &ned) {
-  gsof_msgs::msg::NorthEastDownf ros_ned;
+trimble_gsof_msgs::msg::NorthEastDownf toRosMessage(const trmb::Ned<T> &ned) {
+  trimble_gsof_msgs::msg::NorthEastDownf ros_ned;
   ros_ned.north = ned.north;
   ros_ned.east  = ned.east;
   ros_ned.down  = ned.down;
   return ros_ned;
 }
 
-gsof_msgs::msg::Vector3f toVector3f(const trmb::Xyzf &);
+trimble_gsof_msgs::msg::Vector3f toVector3f(const trmb::Xyzf &);
 
-gsof_msgs::msg::EastNorthUpd toRosMessage(const trmb::Enud &enu);
-gsof_msgs::msg::EulerAngle toRosMessage(const trmb::Pyrd &pyr);
-gsof_msgs::msg::LatLongAltitude toRosLla(const trmb::Llad &lla);
-gsof_msgs::msg::LatLongHeight toRosLlh(const trmb::Llad &lla);
+trimble_gsof_msgs::msg::EastNorthUpd toRosMessage(const trmb::Enud &enu);
+trimble_gsof_msgs::msg::EulerAngle toRosMessage(const trmb::Pyrd &pyr);
+trimble_gsof_msgs::msg::LatLongAltitude toRosLla(const trmb::Llad &lla);
+trimble_gsof_msgs::msg::LatLongHeight toRosLlh(const trmb::Llad &lla);
 }  // namespace gsof
 
 rclcpp::Time toRosTimeOfTheWeek(const trmb::gsof::GpsTime &gps_time);
 rclcpp::Time toRosTimeGpsEpoch(const trmb::gsof::GpsTime &gps_time);
 
-gsof_msgs::msg::GpsTime toRosMessage(const trmb::gsof::GpsTime &gps_time);
-gsof_msgs::msg::Status toRosMessage(const trmb::gsof::Status &status);
-gsof_msgs::msg::Status toRosMessage(const trmb::gsof::VnavStatus &status);
+trimble_gsof_msgs::msg::GpsTime toRosMessage(const trmb::gsof::GpsTime &gps_time);
+trimble_gsof_msgs::msg::Status toRosMessage(const trmb::gsof::Status &status);
+trimble_gsof_msgs::msg::Status toRosMessage(const trmb::gsof::VnavStatus &status);
 
-gsof_msgs::msg::PositionTimeInfo1 toRosMessage(const trmb::gsof::PositionTimeInfo &);
-gsof_msgs::msg::LatLongHeight2 toRosMessage(const trmb::gsof::LatLongHeight &);
-gsof_msgs::msg::EcefPosition3 toRosMessage(const trmb::gsof::EcefPosition &);
-gsof_msgs::msg::EcefDelta6 toRosMessage(const trmb::gsof::EcefDelta &);
-gsof_msgs::msg::TangentPlaneDelta7 toRosMessage(const trmb::gsof::TangentPlaneDelta &);
-gsof_msgs::msg::Velocity8 toRosMessage(const trmb::gsof::Velocity &);
-gsof_msgs::msg::PdopInfo9 toRosMessage(const trmb::gsof::PdopInfo &);
-gsof_msgs::msg::ClockInfo10 toRosMessage(const trmb::gsof::ClockInfo &);
-gsof_msgs::msg::PositionVcvInfo11 toRosMessage(const trmb::gsof::PositionVcvInfo &);
-gsof_msgs::msg::PositionSigmaInfo12 toRosMessage(const trmb::gsof::PositionSigmaInfo &);
-gsof_msgs::msg::ReceiverSerialNumber15 toRosMessage(const trmb::gsof::ReceiverSerialNumber &);
-gsof_msgs::msg::CurrentTime16 toRosMessage(const trmb::gsof::CurrentTime &);
-gsof_msgs::msg::AttitudeVariance toRosMessage(const trmb::gsof::AttitudeInfo::Variance &);
-gsof_msgs::msg::AttitudeInfo27 toRosMessage(const trmb::gsof::AttitudeInfo &);
-gsof_msgs::msg::SpaceVehicleBriefInfo toRosMessage(const trmb::gsof::SVBriefInfo &);
-gsof_msgs::msg::AllSvBrief33 toRosMessage(const trmb::gsof::AllSvBrief &);
-gsof_msgs::msg::SpaceVehicleDetailedInfo toRosMessage(const trmb::gsof::SVDetailedInfo &);
-gsof_msgs::msg::AllSvDetailed34 toRosMessage(const trmb::gsof::AllSvDetailed &);
-gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::ReceivedBaseInfo &);
-gsof_msgs::msg::BatteryMemoryInfo37 toRosMessage(const trmb::gsof::BatteryMemoryInfo &);
-gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::PositionTypeInformation &);
-gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo &);
-gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &);
-gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSolution &);
-gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &);
-gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullNavInfo &);
-gsof_msgs::msg::InsVnavRmsInfo64 toRosMessage(const trmb::gsof::InsVnavRmsInfo &);
+trimble_gsof_msgs::msg::PositionTimeInfo1 toRosMessage(const trmb::gsof::PositionTimeInfo &);
+trimble_gsof_msgs::msg::LatLongHeight2 toRosMessage(const trmb::gsof::LatLongHeight &);
+trimble_gsof_msgs::msg::EcefPosition3 toRosMessage(const trmb::gsof::EcefPosition &);
+trimble_gsof_msgs::msg::EcefDelta6 toRosMessage(const trmb::gsof::EcefDelta &);
+trimble_gsof_msgs::msg::TangentPlaneDelta7 toRosMessage(const trmb::gsof::TangentPlaneDelta &);
+trimble_gsof_msgs::msg::Velocity8 toRosMessage(const trmb::gsof::Velocity &);
+trimble_gsof_msgs::msg::PdopInfo9 toRosMessage(const trmb::gsof::PdopInfo &);
+trimble_gsof_msgs::msg::ClockInfo10 toRosMessage(const trmb::gsof::ClockInfo &);
+trimble_gsof_msgs::msg::PositionVcvInfo11 toRosMessage(const trmb::gsof::PositionVcvInfo &);
+trimble_gsof_msgs::msg::PositionSigmaInfo12 toRosMessage(const trmb::gsof::PositionSigmaInfo &);
+trimble_gsof_msgs::msg::ReceiverSerialNumber15 toRosMessage(const trmb::gsof::ReceiverSerialNumber &);
+trimble_gsof_msgs::msg::CurrentTime16 toRosMessage(const trmb::gsof::CurrentTime &);
+trimble_gsof_msgs::msg::AttitudeVariance toRosMessage(const trmb::gsof::AttitudeInfo::Variance &);
+trimble_gsof_msgs::msg::AttitudeInfo27 toRosMessage(const trmb::gsof::AttitudeInfo &);
+trimble_gsof_msgs::msg::SpaceVehicleBriefInfo toRosMessage(const trmb::gsof::SVBriefInfo &);
+trimble_gsof_msgs::msg::AllSvBrief33 toRosMessage(const trmb::gsof::AllSvBrief &);
+trimble_gsof_msgs::msg::SpaceVehicleDetailedInfo toRosMessage(const trmb::gsof::SVDetailedInfo &);
+trimble_gsof_msgs::msg::AllSvDetailed34 toRosMessage(const trmb::gsof::AllSvDetailed &);
+trimble_gsof_msgs::msg::ReceivedBaseInfo35 toRosMessage(const trmb::gsof::ReceivedBaseInfo &);
+trimble_gsof_msgs::msg::BatteryMemoryInfo37 toRosMessage(const trmb::gsof::BatteryMemoryInfo &);
+trimble_gsof_msgs::msg::PositionTypeInformation38 toRosMessage(const trmb::gsof::PositionTypeInformation &);
+trimble_gsof_msgs::msg::LbandStatusInfo40 toRosMessage(const trmb::gsof::LbandStatusInfo &);
+trimble_gsof_msgs::msg::BasePositionAndQualityIndicator41 toRosMessage(const trmb::gsof::BasePositionAndQualityIndicator &);
+trimble_gsof_msgs::msg::NavigationSolution49 toRosMessage(const trmb::gsof::NavigationSolution &);
+trimble_gsof_msgs::msg::NavigationPerformance50 toRosMessage(const trmb::gsof::NavigationPerformance &);
+trimble_gsof_msgs::msg::InsVnavFullNavInfo63 toRosMessage(const trmb::gsof::InsVnavFullNavInfo &);
+trimble_gsof_msgs::msg::InsVnavRmsInfo64 toRosMessage(const trmb::gsof::InsVnavRmsInfo &);
 
 }  // namespace trmb_ros
