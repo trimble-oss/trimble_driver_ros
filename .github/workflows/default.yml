@@ -1,4 +1,6 @@
 name: build_and_test
+permissions:
+      contents: read
 on:
     [pull_request]
 
@@ -26,7 +28,7 @@ jobs:
             - name: Extra colcon extensions
               run: |
                 apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result
-            - uses: ros-tooling/action-ros-ci@0.4.3
+            - uses: ros-tooling/action-ros-ci@9125cf1fa1f87e7830ed1c77f8b1885ee649b9a0 # 0.4.6
               with:
                 package-name: >
                     trimble_driver
