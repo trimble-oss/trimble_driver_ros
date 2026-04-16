@@ -19,7 +19,7 @@ PacketParserBase::PacketParserBase(const std::byte *data, const size_t length) {
 
 void PacketParserBase::setData(const std::byte *data, const size_t length) {
   data_     = data;
-  messages_ = data_ + sizeof(gsof::record::Header);
+  messages_ = &data_[sizeof(gsof::record::Header)];
   length_   = length;
 }
 
@@ -33,7 +33,7 @@ bool PacketParserBase::isValid() const {
   if (header.type != gsof::GENOUT) return false;
 
   gsof::record::Footer footer;
-  std::memcpy(&footer, data_ + length_ - sizeof(footer), sizeof(footer));
+  std::memcpy(&footer, &data_[length_ - sizeof(footer)], sizeof(footer));
 
   if (footer.end_tx != gsof::END_TX) return false;
 
