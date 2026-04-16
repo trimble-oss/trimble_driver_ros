@@ -170,14 +170,14 @@ template <>
   AllSvBrief i{};
   auto data = data_;
   std::memcpy(&i.header, data, sizeof(Header));
-  data = data + sizeof(Header);
+  data = &data[sizeof(Header)];
   std::memcpy(&i.num_svs, data, sizeof(i.num_svs));
-  data = data + sizeof(i.num_svs);
+  data = &data[sizeof(i.num_svs)];
 
   i.sv_info.resize(i.num_svs);
   for (auto& info : i.sv_info) {
     std::memcpy(&info, data, sizeof(SVBriefInfo));
-    data += sizeof(SVBriefInfo);
+    data = &data[sizeof(SVBriefInfo)];
   }
 
   i.switchEndianess();
@@ -189,15 +189,15 @@ template <>
   AllSvDetailed i{};
   auto data = data_;
   std::memcpy(&i.header, data, sizeof(Header));
-  data = data + sizeof(Header);
+  data = &data[sizeof(Header)];
   std::memcpy(&i.num_svs, data, sizeof(i.num_svs));
-  data = data + sizeof(i.num_svs);
+  data = &data[sizeof(i.num_svs)];
 
   SVDetailedInfo info{};
   for (int n = 0; n < i.num_svs; n++) {
     std::memcpy(&info, data, sizeof(SVDetailedInfo));
     i.sv_info.push_back(info);
-    data += sizeof(SVDetailedInfo);
+    data = &data[sizeof(SVDetailedInfo)];
   }
 
   i.switchEndianess();
