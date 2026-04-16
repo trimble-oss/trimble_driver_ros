@@ -52,13 +52,13 @@ StreamChapterParser::Payload StreamChapterParser::assemblePayloadAndClearBuffer(
   for (auto &page : chapter_buf_) {
     std::memcpy(&header, page.data(), sizeof(header));
     std::size_t data_length = header.getSizeOfDataRecords();
-    std::memcpy(payload.data() + bytes_copied, page.data() + sizeof(record::Header), data_length);
+    std::memcpy(payload.data() + bytes_copied, &page[sizeof(record::Header)], data_length);
     bytes_copied += data_length;
   }
 
   std::memcpy(&header, last_page.data(), sizeof(header));
   std::size_t data_length = header.getSizeOfDataRecords();
-  std::memcpy(payload.data() + bytes_copied, last_page.data() + sizeof(record::Header), data_length);
+  std::memcpy(payload.data() + bytes_copied, &last_page[sizeof(record::Header)], data_length);
   bytes_copied += data_length;
 
   assert(bytes_copied == total_payload_size);
