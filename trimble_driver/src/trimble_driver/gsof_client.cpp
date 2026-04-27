@@ -19,8 +19,8 @@ GsofClient::GsofClient(const std::string &ip_address, unsigned int port)
 
 GsofClient::~GsofClient() {
   stop();
-  if (tcp_thread_->joinable()) {
-    tcp_thread_->join();
+  if (tcp_thread_.joinable()) {
+    tcp_thread_.join();
   }
 }
 
@@ -28,7 +28,7 @@ util::Status GsofClient::start() {
   util::Status status = tcp_client_.open();
   if (!status) return status;
 
-  tcp_thread_ = std::make_unique<std::thread>(&GsofClient::runTcpConnection, this);
+  tcp_thread_ = std::thread(&GsofClient::runTcpConnection, this);
   return status;
 }
 

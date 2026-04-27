@@ -7,6 +7,7 @@ trmb_cc_test(
         trimble_driver_test
     SRCS
         test_byteswap.cpp
+        test_client.cpp
         test_gsof.cpp
         test_gsof_streaming.cpp
         test_ros_conversions.cpp
