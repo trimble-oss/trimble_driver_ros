@@ -10,9 +10,9 @@
 
 namespace trmb {
 
-GsofClient::GsofClient(const std::string &ip_address, unsigned int port)
+GsofClient::GsofClient(const std::string& ip_address, unsigned int port)
     : keep_running_(true), tcp_client_(ip_address, port) {
-  gsof_stream_parser_.registerGsofChapterFoundCallback([this](const std::vector<std::byte> &chapter) {
+  gsof_stream_parser_.registerGsofChapterFoundCallback([this](const std::vector<std::byte>& chapter) {
     this->gsofChapterCallback<gsof::MessageParser<gsof::SupportedPublicMessages>>(chapter);
   });
 }
@@ -36,7 +36,7 @@ void GsofClient::stop() { keep_running_ = false; }
 
 std::vector<GsofClient::MessageCallback>::iterator GsofClient::registerCallback(
     gsof::Id id,
-    const GsofClient::MessageCallback &callback) {
+    const GsofClient::MessageCallback& callback) {
   if (message_callbacks_.count(id) == 0) {
     message_callbacks_[id] = std::vector<MessageCallback>();
   }
@@ -56,7 +56,7 @@ void GsofClient::grabAndParseTcp() {
   int bytes_rcvd = tcp_client_.receive();
   if (bytes_rcvd < 1) return;
 
-  auto &&buffer = tcp_client_.getBuffer();
+  auto&& buffer = tcp_client_.getBuffer();
   gsof_stream_parser_.readSome(buffer.data(), bytes_rcvd);
 }
 
