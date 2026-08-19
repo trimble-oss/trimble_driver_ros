@@ -169,7 +169,7 @@ TEST(GsofStreamingTest, parseMultiPacketTransmission) {
         byteswapInPlace(&value);
       }
       const auto *bytes = reinterpret_cast<const std::byte *>(&value);
-      velocity.insert(velocity.end(), bytes, bytes + sizeof(value));
+      velocity.insert(velocity.end(), bytes, &bytes[sizeof(value)]);
     };
     append(static_cast<uint8_t>(GSOF_ID_8_VELOCITY));
     append(static_cast<uint8_t>(k_expected_gsof_velocity_message_size - sizeof(Header)));
