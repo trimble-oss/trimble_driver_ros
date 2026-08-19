@@ -27,7 +27,7 @@ jobs:
                 git lfs install
             - name: Extra colcon extensions
               run: |
-                apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result
+                apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result python3-colcon-cd
             - uses: ros-tooling/action-ros-ci@9125cf1fa1f87e7830ed1c77f8b1885ee649b9a0 # 0.4.6
               id: action_ros_ci_step
               with:
@@ -39,7 +39,6 @@ jobs:
                 import-token: ${{ secrets.GITHUB_TOKEN }}
             - name: Run extra pcap tests
               run: |
-                echo "=== Current Directory ($GITHUB_WORKSPACE) ==="
-                find . -maxdepth 4 -not -path '*/.*'
-                cd ${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/src/trimble_driver_ros/trimble_driver/test/data
+                source /usr/share/colcon_cd/function/colcon_cd.sh
+                colcon_cd trimble_driver
                 ${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/build/trimble_driver/bin/trimble_driver_pcap_test 
