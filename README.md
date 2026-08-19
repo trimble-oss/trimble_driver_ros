@@ -63,7 +63,7 @@ Building can be done through the typical ROS workflow of using `rosdep` and `col
    cd ~/colcon_ws/src
    git clone ...
    ```
-   [Optional] ownload the test files to run the unit tests.
+   [Optional] Download the test files to run pcap based unit tests with real data
    ```
    git lfs pull
    ```
@@ -81,6 +81,11 @@ Building can be done through the typical ROS workflow of using `rosdep` and `col
 4. [Optional] Run unit tests
    ```
    colcon test --event-handlers console_direct+
+   ```
+5. [Optional] Run pcap based unit tests
+   ```
+   cd trimble_driver/test/data
+   ${workspace_root}/build/trimble_driver/bin/trimble_driver_pcap_test
    ```
 
 ## Running

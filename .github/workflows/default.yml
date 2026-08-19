@@ -36,3 +36,7 @@ jobs:
                     trimble_interfaces
                 target-ros2-distro: jazzy
                 import-token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Run extra pcap tests
+              run: |
+                cd trimble_driver/test/data
+                $GITHUB_WORKSPACE/build/trimble_driver/bin/trimble_driver_pcap_test 
