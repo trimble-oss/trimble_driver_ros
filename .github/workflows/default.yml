@@ -41,4 +41,5 @@ jobs:
               run: |
                 source /usr/share/colcon_cd/function/colcon_cd.sh
                 colcon_cd trimble_driver
+                cd test/data
                 ${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/build/trimble_driver/bin/trimble_driver_pcap_test 
