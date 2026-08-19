@@ -28,6 +28,11 @@ GsofClientRos::GsofClientRos(const rclcpp::NodeOptions &options)
   setupRosParameters();
 
   gsof_client_ = std::make_unique<trmb::GsofClient>(ip_, port_);
+  gsof_client_->setCallbackExceptionHandler([this](trmb::gsof::Id id, const std::string &message) {
+    const auto id_value = static_cast<unsigned int>(id);
+    RCLCPP_ERROR(this->get_logger(), "GSOF callback for message ID %u threw an exception: %s", id_value,
+                 message.c_str());
+  });
 
   this->setupRosPublishersAndCallbacks();
 
