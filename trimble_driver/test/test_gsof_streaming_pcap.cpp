@@ -28,7 +28,9 @@ static constexpr int k_streaming_apx18_port       = 5018;
 class Apx18StreamingGsofTest : public StreamingTest {
  public:
   Apx18StreamingGsofTest()
-      : StreamingTest("apx_18_fullnav_fullrmsinfo.pcap", k_streaming_apx18_ip_addr, k_streaming_apx18_port,
+      : StreamingTest("apx_18_fullnav_fullrmsinfo.pcap",
+                      k_streaming_apx18_ip_addr,
+                      k_streaming_apx18_port,
                       network::ProtocolType::TCP) {}
 };
 

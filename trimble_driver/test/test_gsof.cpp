@@ -512,21 +512,21 @@ TEST(GsofParsingTest, attitudeInfoGsof27) {
     append(k_length_with_variance);
     append(static_cast<uint32_t>(162629000));
     append(static_cast<uint8_t>(0b0000'1111));
-    append(static_cast<uint8_t>(27));                                    // num svs
-    append(static_cast<uint8_t>(Mode::CalcMode::RTK_FIX));               // calc mode
-    append(static_cast<uint8_t>(0));                                     // reserved
-    append(-6.92433215936082754188296561892E-3);                         // pitch
-    append(3.131870495343419);                                           // yaw
-    append(3.135750624153477);                                           // roll
-    append(0.0);                                                         // master slave range
-    append(static_cast<uint16_t>(10));                                   // pdop
-    append(0.000003936937f);                                             // pitch variance
-    append(0.0000271099088f);                                            // yaw variance
-    append(0.00000382736971f);                                           // roll variance
-    append(0.0f);                                                        // pitch-yaw covariance
-    append(0.0f);                                                        // pitch-roll covariance
-    append(0.0f);                                                        // yaw-roll covariance
-    append(0.0f);                                                        // master slave range variance
+    append(static_cast<uint8_t>(27));                       // num svs
+    append(static_cast<uint8_t>(Mode::CalcMode::RTK_FIX));  // calc mode
+    append(static_cast<uint8_t>(0));                        // reserved
+    append(-6.92433215936082754188296561892E-3);            // pitch
+    append(3.131870495343419);                              // yaw
+    append(3.135750624153477);                              // roll
+    append(0.0);                                            // master slave range
+    append(static_cast<uint16_t>(10));                      // pdop
+    append(0.000003936937f);                                // pitch variance
+    append(0.0000271099088f);                               // yaw variance
+    append(0.00000382736971f);                              // roll variance
+    append(0.0f);                                           // pitch-yaw covariance
+    append(0.0f);                                           // pitch-roll covariance
+    append(0.0f);                                           // yaw-roll covariance
+    append(0.0f);                                           // master slave range variance
 
     return makeGenoutRecord(message.data(), message.size());
   }();
@@ -578,7 +578,7 @@ TEST(GsofParsingTest, allSvBriefInfoGsof33) {
   const std::array<uint8_t, k_num_svs> expected_prn                  = {0x0b, 0x17, 0x03, 0x29};
   const std::array<uint8_t, k_num_svs> sv_system                     = {0, 2, 3, 5};
   const std::array<SatelliteType, k_num_svs> expected_satellite_type = {SatelliteType::GPS, SatelliteType::GLONASS,
-                                                                       SatelliteType::GALILEO, SatelliteType::BEIDOU};
+                                                                        SatelliteType::GALILEO, SatelliteType::BEIDOU};
 
   const auto record = [&] {
     // AllSvBrief holds a variable length satellite list so it cannot be memcpy'd as a whole struct.
@@ -822,19 +822,19 @@ TEST(GsofParsingTest, positionTypeGsof38) {
 
     append(static_cast<uint8_t>(GSOF_ID_38_POSITION_TYPE_INFO));
     append(k_length_up_to_fw4_94);
-    append(1.0f);                                             // error scale
-    append(static_cast<uint8_t>(0b0000'1010));                // RTK fix, initialization integrity check passed
-    append(static_cast<uint8_t>(0));                          // rtk condition
-    append(0.0f);                                             // correction age
-    append(static_cast<uint8_t>(0));                          // network flags
-    append(static_cast<uint8_t>(0));                          // network flags 2
-    append(static_cast<uint8_t>(0));                          // frame flag
-    append(static_cast<uint16_t>(0));                         // itrf epoch
-    append(static_cast<uint8_t>(0));                          // tectonic plate
-    append(int32_t{0});                                       // rtx ram subscription minutes left
-    append(static_cast<uint8_t>(0));                          // pole wobble status flag
-    append(0.0f);                                             // pole wobble distance
-    append(static_cast<uint8_t>(PositionFix::k_ins_rtk));     // position fix type
+    append(1.0f);                                          // error scale
+    append(static_cast<uint8_t>(0b0000'1010));             // RTK fix, initialization integrity check passed
+    append(static_cast<uint8_t>(0));                       // rtk condition
+    append(0.0f);                                          // correction age
+    append(static_cast<uint8_t>(0));                       // network flags
+    append(static_cast<uint8_t>(0));                       // network flags 2
+    append(static_cast<uint8_t>(0));                       // frame flag
+    append(static_cast<uint16_t>(0));                      // itrf epoch
+    append(static_cast<uint8_t>(0));                       // tectonic plate
+    append(int32_t{0});                                    // rtx ram subscription minutes left
+    append(static_cast<uint8_t>(0));                       // pole wobble status flag
+    append(0.0f);                                          // pole wobble distance
+    append(static_cast<uint8_t>(PositionFix::k_ins_rtk));  // position fix type
 
     return makeGenoutRecord(message.data(), message.size());
   }();
@@ -890,32 +890,32 @@ TEST(GsofParsingTest, lbandStatusGsof40) {
 
   const auto record = [&expected_name] {
     LbandStatusInfo expected{};
-    expected.header.type   = GSOF_ID_40_LBAND_STATUS;
-    expected.header.length = sizeof(LbandStatusInfo) - sizeof(Header);
+    expected.header.type    = GSOF_ID_40_LBAND_STATUS;
+    expected.header.length  = sizeof(LbandStatusInfo) - sizeof(Header);
     expected.satellite_name = expected_name;
     // This frequency and baud rate were taken from https://positioningservices.trimble.com/resources/sat/ it is the
     // North America RTX beam frequency and baud
-    expected.nominal_sat_freq              = 1555.8080f;
-    expected.sat_bit_rate                  = 2400;
-    expected.c_no                          = 47.0f;
-    expected.hpxp_sub_engine               = static_cast<uint8_t>(omnistar::HpXpEngine::k_hp);
-    expected.hpxp_library_mode             = static_cast<uint8_t>(omnistar::HpXpLibraryMode::k_not_active);
-    expected.vbs_library_mode              = static_cast<uint8_t>(omnistar::VbsLibraryMode::k_not_active);
-    expected.beam_mode                     = static_cast<uint8_t>(omnistar::BeamMode::k_tracking);
-    expected.omnistar_motion               = static_cast<uint8_t>(omnistar::MotionState::k_unknown);
-    expected.sigma_hor_threshold           = 0.3f;
-    expected.sigma_ver_threshold           = 0.3f;
-    expected.nmea_enc_state                = static_cast<uint8_t>(omnistar::NmeaEncryptionState::k_off);
-    expected.i_q_ratio                     = 5.08325863f;
-    expected.estimated_bit_error_rate      = 0.000029838955f;
-    expected.total_messages                = 8790;
+    expected.nominal_sat_freq               = 1555.8080f;
+    expected.sat_bit_rate                   = 2400;
+    expected.c_no                           = 47.0f;
+    expected.hpxp_sub_engine                = static_cast<uint8_t>(omnistar::HpXpEngine::k_hp);
+    expected.hpxp_library_mode              = static_cast<uint8_t>(omnistar::HpXpLibraryMode::k_not_active);
+    expected.vbs_library_mode               = static_cast<uint8_t>(omnistar::VbsLibraryMode::k_not_active);
+    expected.beam_mode                      = static_cast<uint8_t>(omnistar::BeamMode::k_tracking);
+    expected.omnistar_motion                = static_cast<uint8_t>(omnistar::MotionState::k_unknown);
+    expected.sigma_hor_threshold            = 0.3f;
+    expected.sigma_ver_threshold            = 0.3f;
+    expected.nmea_enc_state                 = static_cast<uint8_t>(omnistar::NmeaEncryptionState::k_off);
+    expected.i_q_ratio                      = 5.08325863f;
+    expected.estimated_bit_error_rate       = 0.000029838955f;
+    expected.total_messages                 = 8790;
     expected.total_unique_words_with_errors = 3265;
-    expected.total_bad_unique_word_bits    = 9939;
-    expected.total_num_viterbi_symbols     = 71453248;
-    expected.num_corrected_viterbi_symbols = 1147334;
-    expected.num_bad_messages              = 39;
-    expected.meas_frequency_valid_flag     = 1;
-    expected.measured_frequency            = 1555808020.7808383;
+    expected.total_bad_unique_word_bits     = 9939;
+    expected.total_num_viterbi_symbols      = 71453248;
+    expected.num_corrected_viterbi_symbols  = 1147334;
+    expected.num_bad_messages               = 39;
+    expected.meas_frequency_valid_flag      = 1;
+    expected.measured_frequency             = 1555808020.7808383;
 
     const auto message = serialize(expected);
     return makeGenoutRecord(message.data(), message.size());

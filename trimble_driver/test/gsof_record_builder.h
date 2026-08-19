@@ -33,8 +33,11 @@ std::vector<std::byte> serialize(MessageType message) {
 /**
  * @brief Wraps an already big-endian payload into a single GENOUT page.
  */
-inline std::vector<std::byte> makeGenoutPage(const std::byte *payload, std::size_t payload_length, uint8_t tx_num,
-                                             uint8_t page_idx, uint8_t max_page_idx) {
+inline std::vector<std::byte> makeGenoutPage(const std::byte *payload,
+                                             std::size_t payload_length,
+                                             uint8_t tx_num,
+                                             uint8_t page_idx,
+                                             uint8_t max_page_idx) {
   using trmb::gsof::record::Footer;
   using trmb::gsof::record::Header;
 
