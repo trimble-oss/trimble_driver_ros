@@ -54,7 +54,7 @@ class GsofClient {
   void gsofChapterCallback(const std::vector<std::byte> &chapter);
 
  private:
-  std::unique_ptr<std::thread> tcp_thread_;
+  std::thread tcp_thread_;
   std::atomic_bool keep_running_;
 
   network::TcpClient tcp_client_;
