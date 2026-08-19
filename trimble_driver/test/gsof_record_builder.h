@@ -52,7 +52,7 @@ inline std::vector<std::byte> makeGenoutPage(const std::byte *payload,
 
   std::vector<std::byte> page(sizeof(Header) + payload_length + sizeof(Footer));
   std::memcpy(page.data(), &header, sizeof(Header));
-  std::memcpy(page.data() + sizeof(Header), payload, payload_length);
+  std::memcpy(&page.data()[sizeof(Header)], payload, payload_length);
 
   constexpr std::size_t k_checksum_data_start = 4;  // (1) stx + (1) status + (1) type + (1) data_len
   unsigned int checksum                       = header.status + header.type + header.data_len;
@@ -61,7 +61,7 @@ inline std::vector<std::byte> makeGenoutPage(const std::byte *payload,
   }
 
   const Footer footer{static_cast<uint8_t>(checksum % 256), trmb::gsof::END_TX};
-  std::memcpy(page.data() + sizeof(Header) + payload_length, &footer, sizeof(Footer));
+  std::memcpy(&page.data()[sizeof(Header) + payload_length], &footer, sizeof(Footer));
 
   return page;
 }
