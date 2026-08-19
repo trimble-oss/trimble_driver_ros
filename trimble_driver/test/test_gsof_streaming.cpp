@@ -5,37 +5,84 @@
 
 #include <gtest/gtest.h>
 
-#include <chrono>
+#include <algorithm>
 #include <set>
+#include <vector>
 
-#include "streaming_test.h"
+#include "gsof_record_builder.h"
 #include "trimble_driver/gsof/packet_parser.h"
 #include "trimble_driver/gsof/stream_chapter_parser.h"
 #include "trimble_driver/gsof/stream_page_parser.h"
 
+using gsof_test::makeGenoutRecord;
+using gsof_test::makeGenoutTransmission;
+using gsof_test::serialize;
 using trmb::gsof::Message;
 using trmb::gsof::PacketParser;
 using trmb::gsof::PublicPacketParser;
 
-static constexpr char k_apx18_ip_addr[] = "238.0.0.1";
-static constexpr int k_apx18_port       = 5018;
+namespace {
 
-class Apx18StreamingGsofTest : public StreamingTest {
- public:
-  Apx18StreamingGsofTest()
-      : StreamingTest("apx_18_fullnav_fullrmsinfo.pcap", k_apx18_ip_addr, k_apx18_port, network::ProtocolType::TCP) {}
-};
+/**
+ * @brief Builds a GENOUT record holding a full INS nav solution and its associated RMS error values.
+ */
+std::vector<std::byte> makeNavAndRmsRecord(uint32_t gps_time_msec) {
+  using namespace trmb::gsof;
 
-TEST_F(Apx18StreamingGsofTest, streamParserWithOverlap) {
+  NavigationSolution solution{};
+  solution.header.type        = GSOF_ID_49_INS_FULL_NAV;
+  solution.header.length      = sizeof(NavigationSolution) - sizeof(Header);
+  solution.gps_time.week      = 2226;
+  solution.gps_time.time_msec = gps_time_msec;
+
+  NavigationPerformance rms{};
+  rms.header.type        = GSOF_ID_50_INS_RMS;
+  rms.header.length      = sizeof(NavigationPerformance) - sizeof(Header);
+  rms.gps_time.week      = 2226;
+  rms.gps_time.time_msec = gps_time_msec;
+
+  auto messages           = serialize(solution);
+  const auto rms_messages = serialize(rms);
+  messages.insert(messages.end(), rms_messages.begin(), rms_messages.end());
+
+  return makeGenoutRecord(messages.data(), messages.size());
+}
+
+/**
+ * @brief Feeds a byte stream to a parser in chunks that do not line up with the record boundaries.
+ */
+template <class ParserType>
+void readInChunks(ParserType &parser, const std::vector<std::byte> &stream, std::size_t chunk_size) {
+  const auto *data = reinterpret_cast<const std::uint8_t *>(stream.data());
+  for (std::size_t offset = 0; offset < stream.size(); offset += chunk_size) {
+    parser.readSome(data + offset, std::min(chunk_size, stream.size() - offset));
+  }
+}
+
+}  // namespace
+
+TEST(GsofStreamingTest, streamParserWithOverlap) {
+  constexpr std::size_t k_expected_pages = 5;
+  constexpr std::size_t k_chunk_size     = 37;  // Deliberately unaligned with the record size
+
+  const auto stream = [] {
+    std::vector<std::byte> bytes;
+    for (std::size_t i = 0; i < k_expected_pages; ++i) {
+      const auto record = makeNavAndRmsRecord(static_cast<uint32_t>(1000 * (i + 1)));
+      bytes.insert(bytes.end(), record.begin(), record.end());
+    }
+    return bytes;
+  }();
+
   trmb::gsof::StreamPageParser stream_parser;
-  std::optional<network::NonOwningBuffer> maybe_data = std::nullopt;
+  std::size_t page_count = 0;
 
-  stream_parser.registerGsofPageFoundCallback([](const std::vector<std::byte> &page) {
+  stream_parser.registerGsofPageFoundCallback([&page_count](const std::vector<std::byte> &page) {
     PacketParser packet_parser(page.data(), page.size());
     ASSERT_TRUE(packet_parser.isValid());
     ASSERT_TRUE(packet_parser.isSupported());
 
-    // Every record in this pcap contains a full ins nav and the associated RMS error values
+    // Every record in this stream contains a full ins nav and the associated RMS error values
     auto msg_parser = packet_parser.getMessageParser();
     ASSERT_TRUE(msg_parser.isSupported());
     ASSERT_TRUE(msg_parser.isValid());
@@ -46,33 +93,26 @@ TEST_F(Apx18StreamingGsofTest, streamParserWithOverlap) {
     ASSERT_EQ(it->getHeader().type, trmb::gsof::GSOF_ID_50_INS_RMS);
     ++it;
     ASSERT_EQ(it, msg_parser.end());
+
+    ++page_count;
   });
 
-  for (maybe_data = getData(); maybe_data.has_value(); maybe_data = getData()) {
-    stream_parser.readSome(maybe_data->data, maybe_data->length);
-  }
+  readInChunks(stream_parser, stream, k_chunk_size);
+
+  ASSERT_EQ(page_count, k_expected_pages);
 }
 
-static constexpr char applus20_ip_addr[] = "238.0.0.1";
-static constexpr int applus20_port       = 5018;
-
 /**
- * The AP+ 20 large tx pcap contains 3 DCOL-GENOUT transmissions each split over two packets. The packets should
- * contain GSOF messages 1, 2, 3, 6, 8, 9, 10, 11, 12 and 14.
+ * The transmissions below hold more messages than a single page can carry, so each one gets split over two pages.
+ * The messages are GSOF 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 15 and 16.
  */
-class ApPlus20StreamingGsofTest : public StreamingTest {
- public:
-  ApPlus20StreamingGsofTest()
-      : StreamingTest("applus20_large_tx.pcap", applus20_ip_addr, applus20_port, network::ProtocolType::TCP) {}
-};
+TEST(GsofStreamingTest, parseMultiPacketTransmission) {
+  using namespace trmb::gsof;
 
-TEST_F(ApPlus20StreamingGsofTest, parseMultiPacketTransmission) {
-  trmb::gsof::StreamChapterParser parser;
-  std::optional<network::NonOwningBuffer> maybe_data = std::nullopt;
+  constexpr std::size_t k_expected_transmissions = 3;
+  constexpr std::size_t k_chunk_size             = 53;  // Deliberately unaligned with the page size
 
   const std::set<std::uint8_t> expected_gsof_message_ids = {1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 15, 16};
-
-  using namespace trmb::gsof;
 
   // The local heading field is not present because a planar local coordinate was not loaded, therefore the Velocity
   // message size is 15 not 19.
@@ -82,8 +122,123 @@ TEST_F(ApPlus20StreamingGsofTest, parseMultiPacketTransmission) {
       sizeof(TangentPlaneDelta) + k_expected_gsof_velocity_message_size + sizeof(PdopInfo) + sizeof(ClockInfo) +
       sizeof(PositionVcvInfo) + sizeof(PositionSigmaInfo) + sizeof(ReceiverSerialNumber) + sizeof(CurrentTime);
 
+  const auto gsof_messages = [k_expected_gsof_velocity_message_size] {
+    std::vector<std::vector<std::byte>> messages;
+
+    PositionTimeInfo position_time{};
+    position_time.header.type                = GSOF_ID_1_POS_TIME;
+    position_time.header.length              = sizeof(PositionTimeInfo) - sizeof(Header);
+    position_time.gps_time_ms                = 328103007;
+    position_time.gps_week                   = 2226;
+    position_time.number_space_vehicles_used = 25;
+    messages.push_back(serialize(position_time));
+
+    LatLongHeight llh{};
+    llh.header.type   = GSOF_ID_2_LLH;
+    llh.header.length = sizeof(LatLongHeight) - sizeof(Header);
+    llh.lla.latitude  = 0.7654321;
+    llh.lla.longitude = -1.3876543;
+    llh.lla.altitude  = 165.0;
+    messages.push_back(serialize(llh));
+
+    EcefPosition ecef{};
+    ecef.header.type   = GSOF_ID_3_ECEF;
+    ecef.header.length = sizeof(EcefPosition) - sizeof(Header);
+    ecef.pos.x         = 848942.99;
+    ecef.pos.y         = -4527384.15;
+    ecef.pos.z         = 4397104.00;
+    messages.push_back(serialize(ecef));
+
+    EcefDelta ecef_delta{};
+    ecef_delta.header.type   = GSOF_ID_6_ECEF_DELTA;
+    ecef_delta.header.length = sizeof(EcefDelta) - sizeof(Header);
+    ecef_delta.delta.x       = -3473.5847978937672;
+    ecef_delta.delta.y       = 10602.019044206478;
+    ecef_delta.delta.z       = 11631.403884239495;
+    messages.push_back(serialize(ecef_delta));
+
+    TangentPlaneDelta tplane_delta{};
+    tplane_delta.header.type   = GSOF_ID_7_TPLANE_ENU;
+    tplane_delta.header.length = sizeof(TangentPlaneDelta) - sizeof(Header);
+    messages.push_back(serialize(tplane_delta));
+
+    // Velocity has an optional trailing field so it cannot be memcpy'd as a whole struct.
+    std::vector<std::byte> velocity;
+    const auto append = [&velocity](auto value) {
+      if constexpr (sizeof(value) > 1) {
+        byteswapInPlace(&value);
+      }
+      const auto *bytes = reinterpret_cast<const std::byte *>(&value);
+      velocity.insert(velocity.end(), bytes, bytes + sizeof(value));
+    };
+    append(static_cast<uint8_t>(GSOF_ID_8_VELOCITY));
+    append(static_cast<uint8_t>(k_expected_gsof_velocity_message_size - sizeof(Header)));
+    append(static_cast<uint8_t>(0b0000'0101));
+    append(0.0f);  // velocity
+    append(0.0f);  // heading
+    append(0.0f);  // vertical velocity
+    messages.push_back(velocity);
+
+    PdopInfo dop{};
+    dop.header.type     = GSOF_ID_9_DOP;
+    dop.header.length   = sizeof(PdopInfo) - sizeof(Header);
+    dop.position_dop    = 0.9f;
+    dop.horiziontal_dop = 0.488651454f;
+    dop.vertical_dop    = 0.7558355f;
+    dop.time_dop        = 1.13949406f;
+    messages.push_back(serialize(dop));
+
+    ClockInfo clock{};
+    clock.header.type   = GSOF_ID_10_CLOCK_INFO;
+    clock.header.length = sizeof(ClockInfo) - sizeof(Header);
+    clock.clock_flags   = 0b0000'0011;  // clock offset and frequency offset valid
+    clock.clock_offset  = 0.007924753666675877;
+    clock.freq_offset   = -1.6607935199691757;
+    messages.push_back(serialize(clock));
+
+    PositionVcvInfo vcv{};
+    vcv.header.type   = GSOF_ID_11_POS_VCV_INFO;
+    vcv.header.length = sizeof(PositionVcvInfo) - sizeof(Header);
+    vcv.num_epochs    = 0;
+    messages.push_back(serialize(vcv));
+
+    PositionSigmaInfo sigma{};
+    sigma.header.type   = GSOF_ID_12_POS_SIGMA;
+    sigma.header.length = sizeof(PositionSigmaInfo) - sizeof(Header);
+    sigma.number_epochs = 0;
+    messages.push_back(serialize(sigma));
+
+    ReceiverSerialNumber serial{};
+    serial.header.type   = GSOF_ID_15_REC_SERIAL_NUM;
+    serial.header.length = sizeof(ReceiverSerialNumber) - sizeof(Header);
+    serial.number        = 573901788;
+    messages.push_back(serialize(serial));
+
+    CurrentTime time{};
+    time.header.type   = GSOF_ID_16_CURR_TIME;
+    time.header.length = sizeof(CurrentTime) - sizeof(Header);
+    time.gps_ms_week   = 328103007;
+    time.gps_week      = 2226;
+    time.utc_offset    = 18;
+    messages.push_back(serialize(time));
+
+    return messages;
+  }();
+
+  const auto stream = [&gsof_messages] {
+    std::vector<std::byte> bytes;
+    for (std::size_t i = 0; i < k_expected_transmissions; ++i) {
+      const auto transmission = makeGenoutTransmission(gsof_messages, static_cast<uint8_t>(i));
+      bytes.insert(bytes.end(), transmission.begin(), transmission.end());
+    }
+    return bytes;
+  }();
+
+  StreamChapterParser parser;
+  std::size_t chapter_count = 0;
+
   parser.registerGsofChapterFoundCallback(
-      [k_expected_payload_size, &expected_gsof_message_ids](const std::vector<std::byte> &chapter) {
+      [k_expected_payload_size, &expected_gsof_message_ids, &chapter_count](const std::vector<std::byte> &chapter) {
         ASSERT_EQ(chapter.size(), k_expected_payload_size);
         trmb::gsof::MessageParser message_parser(chapter.data(), chapter.size());
 
@@ -139,28 +294,33 @@ TEST_F(ApPlus20StreamingGsofTest, parseMultiPacketTransmission) {
         }
         ASSERT_EQ(parsed_message_count, expected_gsof_message_ids.size())
             << "Parsed message count is different from the amount of messages in the GSOF stream.";
+
+        ++chapter_count;
       });
 
-  for (maybe_data = getData(); maybe_data.has_value(); maybe_data = getData()) {
-    parser.readSome(maybe_data->data, maybe_data->length);
-  }
+  readInChunks(parser, stream, k_chunk_size);
+
+  ASSERT_EQ(chapter_count, k_expected_transmissions);
 }
 
-class ApPlus20SmallStreamingGsofTest : public StreamingTest {
- public:
-  ApPlus20SmallStreamingGsofTest()
-      : StreamingTest("applus20_small_tx.pcap", applus20_ip_addr, applus20_port, network::ProtocolType::TCP) {}
-};
-
-TEST_F(ApPlus20SmallStreamingGsofTest, singlePageStreamTest) {
+TEST(GsofStreamingTest, singlePageStreamTest) {
   // This test checks if the multipage stream parser works properly with a data stream that doesn't get split over
   // multiple pages
-  trmb::gsof::StreamChapterParser parser;
-  std::optional<network::NonOwningBuffer> maybe_data = std::nullopt;
-
   constexpr std::size_t k_expected_chapters = 10;
-  std::size_t chapter_count                 = 0;
-  uint32_t last_time                        = 0;
+  constexpr std::size_t k_chunk_size        = 41;  // Deliberately unaligned with the record size
+
+  const auto stream = [] {
+    std::vector<std::byte> bytes;
+    for (std::size_t i = 0; i < k_expected_chapters; ++i) {
+      const auto record = makeNavAndRmsRecord(static_cast<uint32_t>(1000 * (i + 1)));
+      bytes.insert(bytes.end(), record.begin(), record.end());
+    }
+    return bytes;
+  }();
+
+  trmb::gsof::StreamChapterParser parser;
+  std::size_t chapter_count = 0;
+  uint32_t last_time        = 0;
 
   parser.registerGsofChapterFoundCallback([&chapter_count, &last_time](const std::vector<std::byte> &chapter) {
     trmb::gsof::MessageParser message_parser(chapter.data(), chapter.size());
@@ -178,9 +338,7 @@ TEST_F(ApPlus20SmallStreamingGsofTest, singlePageStreamTest) {
     ++chapter_count;
   });
 
-  for (maybe_data = getData(); maybe_data.has_value(); maybe_data = getData()) {
-    parser.readSome(maybe_data->data, maybe_data->length);
-  }
+  readInChunks(parser, stream, k_chunk_size);
 
   ASSERT_EQ(chapter_count, k_expected_chapters);
 }

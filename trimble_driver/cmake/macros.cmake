@@ -145,9 +145,11 @@ endfunction(trmb_cc_exec)
 # INC_SYS: System includes
 # LINKOPTS: List of link options
 # ADD_GTEST_MAIN: Link to the default googletest main() implementation
+# NO_DISCOVER: Build the test executable but do not register its cases with ctest, so they are
+#              excluded from the default test and coverage runs and must be invoked manually.
 function(trmb_cc_test)
   cmake_parse_arguments(TRMB_CC_TEST
-    "ADD_GTEST_MAIN"
+    "ADD_GTEST_MAIN;NO_DISCOVER"
     "NAME;WORKING_DIR"
     "SRCS;DEPS;COPTS;INC;INC_SYS;LINKOPTS"
     ${ARGN})
@@ -181,16 +183,20 @@ function(trmb_cc_test)
       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
       PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-  gtest_discover_tests(${_NAME}
-    WORKING_DIRECTORY ${TRMB_CC_TEST_WORKING_DIR}
-    XML_OUTPUT_DIR "${CMAKE_BINARY_DIR}/test_results/")
+  if(NOT TRMB_CC_TEST_NO_DISCOVER)
+    gtest_discover_tests(${_NAME}
+      WORKING_DIRECTORY ${TRMB_CC_TEST_WORKING_DIR}
+      XML_OUTPUT_DIR "${CMAKE_BINARY_DIR}/test_results/")
+  endif()
 
   # Add TOPSRCDIR
   foreach(script_src IN ITEMS ${TRMB_CC_TEST_SRCS})
     set_property(SOURCE ${script_src} APPEND PROPERTY COMPILE_DEFINITIONS "TOP_SRC_DIR=\"${PROJECT_SOURCE_DIR}\"")
   endforeach()
 
-  list(APPEND TRMB_UNIT_TESTS ${_NAME})
+  if(NOT TRMB_CC_TEST_NO_DISCOVER)
+    list(APPEND TRMB_UNIT_TESTS ${_NAME})
+  endif()
 
 endfunction(trmb_cc_test)
 

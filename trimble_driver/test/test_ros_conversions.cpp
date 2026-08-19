@@ -16,32 +16,14 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #endif
 
-#include "streaming_test.h"
+#include "gsof_record_builder.h"
 #include "trimble_driver_ros/conversions.h"
 
+using gsof_test::makeGenoutRecord;
+using gsof_test::serialize;
 using trmb::gsof::Message;
 using trmb::gsof::PacketParser;
 using trmb::gsof::PublicPacketParser;
-
-static constexpr char k_ip_addr[] = "238.0.0.1";  // IP Address of SPS986
-static constexpr int k_port       = 5018;         // TCP Port used
-
-class RosConversionsTest : public ::testing::Test {
- public:
-  std::optional<PublicPacketParser> openPcap(const std::string &filename) {
-    pcap_reader_.emplace(filename, k_ip_addr, k_port, network::ProtocolType::TCP);
-    if (!(*pcap_reader_)) return std::nullopt;
-
-    pcap_reader_->readSingle(&payload_);
-    if (payload_.data == nullptr) return std::nullopt;
-
-    return PacketParser(reinterpret_cast<const std::byte *>(payload_.data), payload_.length);
-  }
-
- protected:
-  std::optional<network::PcapReader> pcap_reader_ = std::nullopt;
-  network::NonOwningBuffer payload_{nullptr, 0};
-};
 
 class RosRep103Test : public ::testing::Test {
  public:
@@ -166,11 +148,24 @@ TEST(RosConversions, gsof49INSAttitudeToQuaternion) {
   ASSERT_NEAR(odom.pose.pose.orientation.w, -0.7481401, tolerance);
 }
 
-// PCAP Test
-TEST_F(RosConversionsTest, gsof1toNavSatStatusPCAPTest) {
-  auto maybe_gsof_parser = openPcap("SPS986_gsof1.pcap");
-  ASSERT_TRUE(maybe_gsof_parser);
-  auto gsof_parser = *maybe_gsof_parser;
+TEST(RosConversions, gsof1toNavSatStatusEndToEnd) {
+  using namespace trmb::gsof;
+
+  const auto record = [] {
+    PositionTimeInfo expected{};
+    expected.header.type                = GSOF_ID_1_POS_TIME;
+    expected.header.length              = sizeof(PositionTimeInfo) - sizeof(Header);
+    expected.gps_time_ms                = 162117007;
+    expected.gps_week                   = 2225;
+    expected.number_space_vehicles_used = 25;
+    expected.position_flags_1           = 0b0000'1111;
+    expected.position_flags_2           = 0b0000'0111;  // Fixed integer phase differential solution
+
+    const auto message = serialize(expected);
+    return makeGenoutRecord(message.data(), message.size());
+  }();
+
+  PublicPacketParser gsof_parser(record.data(), record.size());
   ASSERT_TRUE(gsof_parser.isValid());
 
   auto message_parser = gsof_parser.getMessageParser();
@@ -179,7 +174,7 @@ TEST_F(RosConversionsTest, gsof1toNavSatStatusPCAPTest) {
   ASSERT_EQ(it->getHeader().type, 0x01);
   ASSERT_EQ(it->getHeader().length, 10);
 
-  auto position_time = it->as<trmb::gsof::PositionTimeInfo>();
+  auto position_time = it->as<PositionTimeInfo>();
 
   auto ros_nav_sat_status = trmb_ros::toNavSatStatus(position_time);
   ASSERT_EQ(ros_nav_sat_status.status, sensor_msgs::msg::NavSatStatus::STATUS_GBAS_FIX);
