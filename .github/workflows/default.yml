@@ -39,5 +39,7 @@ jobs:
                 import-token: ${{ secrets.GITHUB_TOKEN }}
             - name: Run extra pcap tests
               run: |
+                echo "=== Current Directory ($GITHUB_WORKSPACE) ==="
+                find . -maxdepth 4 -not -path '*/.*'
                 cd ${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/src/trimble_driver_ros/trimble_driver/test/data
                 ${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/build/trimble_driver/bin/trimble_driver_pcap_test 
