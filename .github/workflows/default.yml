@@ -13,22 +13,16 @@ jobs:
         strategy:
             matrix:
                 os:
-                    - ubuntu-latest
-                    - ubuntu-22.04-arm
+                    - ubuntu-24.04
+                    - ubuntu-24.04-arm
         runs-on: ${{ matrix.os }}
         container:
-            image: rostooling/setup-ros-docker:ubuntu-noble-latest
+            image: rostooling/setup-ros-docker:ubuntu-resolute-ros-lyrical-ros-base-latest
         steps:
-            - name: Git LFS
+            - name: apt dependencies
               run: |
-                apt update && apt install -y curl
-                curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-                apt install git-lfs
-                git lfs install
-            - name: Extra colcon extensions
-              run: |
-                apt install -y python3-colcon-lcov-result python3-colcon-coveragepy-result python3-colcon-cd
-            - uses: ros-tooling/action-ros-ci@9125cf1fa1f87e7830ed1c77f8b1885ee649b9a0 # 0.4.6
+                apt install -y git-lfs python3-colcon-lcov-result python3-colcon-coveragepy-result python3-colcon-cd
+            - uses: ros-tooling/action-ros-ci@v0.4
               id: action_ros_ci_step
               with:
                 package-name: >
