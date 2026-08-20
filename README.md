@@ -55,7 +55,7 @@ Building can be done through the typical ROS workflow of using `rosdep` and `col
 
 0. Source your ROS environment
    ```bash
-   source /opt/ros/jazzy/setup.bash
+   source /opt/ros/lyrical/setup.bash
    ```
 
 1. Clone this repository into your colcon workspace
