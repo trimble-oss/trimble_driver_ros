@@ -13,7 +13,7 @@ list(APPEND CMAKE_MODULE_PATH /usr/share/cmake/geographiclib)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(PCAP REQUIRED)
 find_package(GeographicLib REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost 1.90 REQUIRED)
 find_package(Threads REQUIRED)
 
 set(COMMON_COMPILE_FLAGS

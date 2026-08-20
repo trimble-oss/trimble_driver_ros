@@ -9,12 +9,12 @@ namespace network {
 
 UdpClient::UdpClient(std::string ip_address, unsigned int port) : IpClient(ip_address, port) {
   payload_buffer_.fill(0);
-  server_endpoint_ = udp::endpoint(boost::asio::ip::address_v4::from_string(ip_address), port_);
+  server_endpoint_ = udp::endpoint(boost::asio::ip::make_address_v4(ip_address), port_);
   local_endpoint_  = udp::endpoint(boost::asio::ip::address_v4::any(), port_);
 }
 
 util::Status UdpClient::open() {
-  socket_ = std::make_unique<udp::socket>(io_service_);
+  socket_ = std::make_unique<udp::socket>(io_context_);
   boost::system::error_code ec;
   socket_->open(local_endpoint_.protocol(), ec);
   socket_->bind(local_endpoint_);

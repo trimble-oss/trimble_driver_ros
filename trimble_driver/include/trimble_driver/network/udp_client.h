@@ -23,7 +23,7 @@ class UdpClient : public IpClient {
  private:
   using udp = boost::asio::ip::udp;
 
-  boost::asio::io_service io_service_;
+  boost::asio::io_context io_context_;
   std::unique_ptr<udp::socket> socket_;
   udp::endpoint server_endpoint_;
   udp::endpoint local_endpoint_;

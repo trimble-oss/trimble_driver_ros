@@ -12,7 +12,7 @@ trmb_cc_lib(
     ${PCAP_INCLUDE_DIR}
   DEPS
     ${PROJECT_NAME}::util
-    boost_system
+    Boost::headers
     ${PCAP_LIBRARY}
   COPTS
     ${COMMON_COMPILE_FLAGS}
