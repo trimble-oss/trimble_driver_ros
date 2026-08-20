@@ -6,10 +6,12 @@
 #pragma once
 
 #include <atomic>
+#include <exception>
 #include <functional>
 #include <list>
 #include <memory>
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -28,7 +30,8 @@ namespace trmb {
  */
 class GsofClient {
  public:
-  using MessageCallback = std::function<void(const gsof::Message &)>;
+  using MessageCallback          = std::function<void(const gsof::Message &)>;
+  using CallbackExceptionHandler = std::function<void(gsof::Id, const std::string &)>;
   struct unsupported_callback_error : public std::runtime_error {
     unsupported_callback_error()
         : std::runtime_error(
@@ -46,6 +49,7 @@ class GsofClient {
   void stop();
 
   std::vector<MessageCallback>::iterator registerCallback(gsof::Id id, const MessageCallback &callback);
+  void setCallbackExceptionHandler(CallbackExceptionHandler handler);
 
  protected:
   gsof::StreamChapterParser gsof_stream_parser_;
@@ -60,9 +64,11 @@ class GsofClient {
   network::TcpClient tcp_client_;
 
   std::unordered_map<gsof::Id, std::vector<MessageCallback>> message_callbacks_;
+  CallbackExceptionHandler callback_exception_handler_;
 
   void runTcpConnection();
   void grabAndParseTcp();
+  void reportCallbackException(gsof::Id id, const std::string &message);
 };
 
 template <typename GsofMessageParser>
@@ -70,13 +76,20 @@ void GsofClient::gsofChapterCallback(const std::vector<std::byte> &chapter) {
   GsofMessageParser message_parser(chapter.data(), chapter.size());
 
   for (const gsof::Message &message : message_parser) {
-    auto message_callbacks = message_callbacks_.find(message.getHeader().type);
+    const gsof::Id id      = message.getHeader().type;
+    auto message_callbacks = message_callbacks_.find(id);
     if (message_callbacks == message_callbacks_.end()) {
       continue;
     }
 
     for (const MessageCallback &callback : message_callbacks->second) {
-      callback(message);
+      try {
+        callback(message);
+      } catch (const std::exception &e) {
+        reportCallbackException(id, e.what());
+      } catch (...) {
+        reportCallbackException(id, "non-standard exception");
+      }
     }
   }
 }
