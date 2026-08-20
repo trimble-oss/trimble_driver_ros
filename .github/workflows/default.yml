@@ -29,7 +29,7 @@ jobs:
                     trimble_driver
                     trimble_gsof_msgs
                     trimble_interfaces
-                target-ros2-distro: jazzy
+                target-ros2-distro: lyrical
                 import-token: ${{ secrets.GITHUB_TOKEN }}
             - name: Run extra pcap tests
               run: |
