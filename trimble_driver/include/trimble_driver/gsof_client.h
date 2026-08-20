@@ -30,7 +30,7 @@ namespace trmb {
  */
 class GsofClient {
  public:
-  using MessageCallback = std::function<void(const gsof::Message &)>;
+  using MessageCallback          = std::function<void(const gsof::Message &)>;
   using CallbackExceptionHandler = std::function<void(gsof::Id, const std::string &)>;
   struct unsupported_callback_error : public std::runtime_error {
     unsupported_callback_error()
@@ -76,7 +76,7 @@ void GsofClient::gsofChapterCallback(const std::vector<std::byte> &chapter) {
   GsofMessageParser message_parser(chapter.data(), chapter.size());
 
   for (const gsof::Message &message : message_parser) {
-    const gsof::Id id       = message.getHeader().type;
+    const gsof::Id id      = message.getHeader().type;
     auto message_callbacks = message_callbacks_.find(id);
     if (message_callbacks == message_callbacks_.end()) {
       continue;

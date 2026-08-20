@@ -64,7 +64,7 @@ void GsofClient::grabAndParseTcp() {
   gsof_stream_parser_.readSome(buffer.data(), bytes_rcvd);
 }
 
-void GsofClient::reportCallbackException(gsof::Id id, const std::string &message) {
+void GsofClient::reportCallbackException(gsof::Id id, const std::string& message) {
   if (!callback_exception_handler_) return;
 
   try {

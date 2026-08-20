@@ -5,9 +5,8 @@
 
 #include <gtest/gtest.h>
 
-#include <boost/asio.hpp>
-
 #include <atomic>
+#include <boost/asio.hpp>
 #include <chrono>
 #include <future>
 #include <stdexcept>
@@ -90,8 +89,8 @@ TEST_F(ClientTest, callbackExceptionHandlerReportsExceptionAndContinuesDispatch)
   std::string reported_message;
   client.setCallbackExceptionHandler([&](Id id, const std::string &message) {
     exception_handler_called = true;
-    reported_id               = id;
-    reported_message           = message;
+    reported_id              = id;
+    reported_message         = message;
   });
 
   bool second_callback_called = false;
