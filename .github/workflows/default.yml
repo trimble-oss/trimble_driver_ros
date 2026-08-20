@@ -33,7 +33,7 @@ jobs:
                 import-token: ${{ secrets.GITHUB_TOKEN }}
             - name: Run extra pcap tests
               run: |
-                source /usr/share/colcon_cd/function/colcon_cd.sh
+                source /etc/profile.d/colcon_cd.sh
                 source $GITHUB_WORKSPACE/${{ steps.action_ros_ci_step.outputs.ros-workspace-directory-name }}/install/setup.bash
                 colcon_cd trimble_driver
                 cd test/data
