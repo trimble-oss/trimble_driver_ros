@@ -69,7 +69,7 @@ bool StreamPageParser::isGsofPageFound() {
   return packet_found;
 }
 
-bool StreamPageParser::isStartTxFound() { 
+bool StreamPageParser::isStartTxFound() {
   if (buf_.empty()) return false;
   return static_cast<std::uint8_t>(buf_[0]) == START_TX;
 }
