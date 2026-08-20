@@ -22,7 +22,7 @@ jobs:
             - name: apt dependencies
               run: |
                 apt install -y git-lfs python3-colcon-lcov-result python3-colcon-coveragepy-result python3-colcon-cd
-            - uses: ros-tooling/action-ros-ci@v0.4
+            - uses: ros-tooling/action-ros-ci@3a640b10f09b756dabe556dac5413aba369f71b0 # v0.4.8
               id: action_ros_ci_step
               with:
                 package-name: >
