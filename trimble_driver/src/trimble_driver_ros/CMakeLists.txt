@@ -11,30 +11,30 @@ trmb_cc_lib(
     ${COMMON_COMPILE_FLAGS}
 )
 
-ament_target_dependencies(ros_conversions
+target_link_libraries(ros_conversions
   PUBLIC
     GeographicLib
-    geometry_msgs
-    nav_msgs
-    rclcpp
-    sensor_msgs
-    tf2_geometry_msgs
-    trimble_gsof_msgs
+    ${geometry_msgs_TARGETS}
+    ${nav_msgs_TARGETS}
+    rclcpp::rclcpp
+    ${sensor_msgs_TARGETS}
+    ${tf2_geometry_msgs_TARGETS}
+    ${trimble_gsof_msgs_TARGETS}
 )
 
 set(CLIENT_LIBRARIES
-    diagnostic_msgs
+    ${diagnostic_msgs_TARGETS}
     GeographicLib
-    nav_msgs
-    rclcpp
-    rclcpp_components
-    sensor_msgs
-    std_srvs
-    tf2
-    tf2_geometry_msgs
-    tf2_ros
-    trimble_gsof_msgs
-    trimble_interfaces
+    ${nav_msgs_TARGETS}
+    rclcpp::rclcpp
+    ${rclcpp_components_TARGETS}
+    ${sensor_msgs_TARGETS}
+    ${std_srvs_TARGETS}
+    tf2::tf2
+    ${tf2_geometry_msgs_TARGETS}
+    ${tf2_ros_TARGETS}
+    ${trimble_gsof_msgs_TARGETS}
+    ${trimble_interfaces_TARGETS}
 )
 
 trmb_cc_lib(
@@ -51,7 +51,7 @@ trmb_cc_lib(
     ${COMMON_COMPILE_FLAGS}
 )
 
-ament_target_dependencies(gsof_client_ros PUBLIC ${CLIENT_LIBRARIES})
+target_link_libraries(gsof_client_ros PUBLIC ${CLIENT_LIBRARIES})
 
 if(tf2_geometry_msgs_VERSION_MINOR LESS 25)
   target_compile_definitions(ros_conversions PRIVATE TRMB_TF2_HEADER_DEPRECATED)

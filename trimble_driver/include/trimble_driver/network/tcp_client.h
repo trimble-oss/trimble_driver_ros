@@ -28,7 +28,7 @@ class TcpClient : public IpClient {
   uint peekBytes();
 
  private:
-  boost::asio::io_service io_service_;
+  boost::asio::io_context io_context_;
   std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
 };
 

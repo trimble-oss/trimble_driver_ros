@@ -48,9 +48,10 @@ class PcapTcpClient : public IpClient {
     // XXX This is very inefficient
     std::size_t read_some(MutableBufferSequence mb, boost::system::error_code &ec) {
       std::size_t bytes_read = 0;
+      auto* dest = static_cast<char *>(mb.data());
+
       while (bytes_read < boost::asio::buffer_size(mb) && it != end) {
-        auto data_ptr = boost::asio::buffer_cast<char *>(mb + bytes_read);
-        *data_ptr     = *it;
+        dest[bytes_read] = *it;
         ++bytes_read;
         ++it;
       }

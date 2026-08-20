@@ -34,10 +34,10 @@ uint TcpClient::peekBytes() {
 
 util::Status TcpClient::open() {
   using namespace boost::asio::ip;
-  socket_ = std::make_unique<tcp::socket>(io_service_);
+  socket_ = std::make_unique<tcp::socket>(io_context_);
 
   boost::system::error_code ec;
-  socket_->connect(tcp::endpoint(boost::asio::ip::address::from_string(ip_address_), port_), ec);
+  socket_->connect(tcp::endpoint(boost::asio::ip::make_address_v4(ip_address_), port_), ec);
 
   boost::asio::ip::tcp::no_delay no_delay(true);
   socket_->set_option(no_delay);
