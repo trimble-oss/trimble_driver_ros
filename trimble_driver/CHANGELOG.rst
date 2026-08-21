@@ -2,8 +2,8 @@
 Changelog for package trimble_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2026-08-21)
+------------------
 * ci: update to ros lyrical (`#41 <https://github.com/trimble-oss/trimble_driver_ros/issues/41>`_)
 * feat: client callback error handler (`#39 <https://github.com/trimble-oss/trimble_driver_ros/issues/39>`_)
 * fix: avoid pointer arithmetic for codeql (`#38 <https://github.com/trimble-oss/trimble_driver_ros/issues/38>`_)
