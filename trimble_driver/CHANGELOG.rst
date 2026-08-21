@@ -2,8 +2,8 @@
 Changelog for package trimble_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2026-08-21)
+------------------
 * fix: Add buffer check to StreamPageParser
   can cause segfault in certain cases
 * feat: jazzy: Port `#33 <https://github.com/trimble-oss/trimble_driver_ros/issues/33>`_ and `#36 <https://github.com/trimble-oss/trimble_driver_ros/issues/36>`_ (`#37 <https://github.com/trimble-oss/trimble_driver_ros/issues/37>`_)
